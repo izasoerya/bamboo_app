@@ -12,7 +12,7 @@ class ThemeState {
 }
 
 class ThemeStateBloc extends Bloc<ThemeEvent, ThemeState> {
-  ThemeStateBloc() : super(ThemeState(themeMode: ThemeMode.system)) {
+  ThemeStateBloc() : super(ThemeState(themeMode: ThemeMode.dark)) {
     on<ToggleThemeEvent>((event, emit) {
       emit(ThemeState(
         themeMode: state.themeMode == ThemeMode.light
