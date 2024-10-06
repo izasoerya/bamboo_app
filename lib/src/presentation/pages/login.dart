@@ -1,3 +1,4 @@
+import 'package:bamboo_app/src/presentation/widgets/atom/role_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     return Center(
       child: Container(
         width: 1.sw,
-        height: 0.5.sh,
+        height: 0.6.sh,
         margin: EdgeInsets.symmetric(horizontal: 0.05.sw),
         padding: EdgeInsets.symmetric(vertical: 0.03.sh, horizontal: 0.05.sw),
         decoration: BoxDecoration(
@@ -70,6 +71,8 @@ class _LoginPageState extends State<LoginPage> {
                 const ToggleUIModeButton(),
               ],
             ),
+            SizedBox(height: 0.03.sh),
+            RoleAccount(onChanged: (bool isUser) => print(isUser)),
             SizedBox(height: 0.03.sh),
             AuthTextField(
               controller: _controllerEmail,
