@@ -1,4 +1,5 @@
 import 'package:bamboo_app/src/app/presentation/widgets/atom/role_account.dart';
+import 'package:bamboo_app/src/domain/service/s_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -99,12 +100,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  onPressed: () {
-                    if (_validatorEmail(_controllerEmail.text) != null ||
-                        _validatorPassword(_controllerPassword.text) != null) {
-                      return;
-                    }
-                    router.go('/dashboard');
+                  onPressed: () async {
+                    final res = await ServiceUser().signIn(
+                      _controllerEmail.text,
+                      _controllerPassword.text,
+                    );
+                    if (res != null) router.go('/dashboard');
                   },
                   child: Text(
                     'Login',
