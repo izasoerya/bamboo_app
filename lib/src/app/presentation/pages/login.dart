@@ -1,11 +1,11 @@
-import 'package:bamboo_app/src/presentation/widgets/atom/role_account.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/role_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:bamboo_app/src/app/routes/routes.dart';
 import 'package:bamboo_app/src/app/use_cases/textfield_validator.dart';
-import 'package:bamboo_app/src/presentation/widgets/atom/auth_text_field.dart';
-import 'package:bamboo_app/src/presentation/widgets/atom/toggle_ui_mode.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/toggle_ui_mode.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
