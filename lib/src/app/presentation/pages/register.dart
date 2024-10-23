@@ -1,5 +1,6 @@
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/role_account.dart';
+import 'package:bamboo_app/src/domain/entities/e_user.dart';
 import 'package:bamboo_app/src/domain/service/s_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -82,11 +83,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 onPressed: () async {
-                  final res = await ServiceUser().signIn(
-                    _controllerEmail.text,
-                    _controllerPassword.text,
+                  final res = await ServiceUser().signUp(
+                    EntitiesUser(
+                        uid: '',
+                        name: _controllerName.text,
+                        email: _controllerEmail.text,
+                        password: _controllerPassword.text,
+                        organization: isUser ? 'User' : 'Admin'),
                   );
-                  if (res != null) router.go('/dashboard');
+                  if (res != null) router.go('/login');
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Email atau Password Salah'),

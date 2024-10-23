@@ -1,15 +1,17 @@
 import 'package:bamboo_app/src/domain/entities/e_user.dart';
 import 'package:bamboo_app/src/domain/repositories/r_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class InfrastructureUser implements RepositoryUser {
+  final Uuid _uuid = const Uuid();
   final db = FirebaseFirestore.instance;
   @override
   Future<EntitiesUser?> createUser(EntitiesUser user) async {
     await db
         .collection('users')
         .doc()
-        .set(user.toJSON())
+        .set(user.copyWith(uid: _uuid.v4()).toJSON())
         .onError((error, stackTrace) {
       print('Error: $error');
       return null;
