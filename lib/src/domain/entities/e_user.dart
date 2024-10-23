@@ -3,14 +3,12 @@ class EntitiesUser {
   final String name;
   final String email;
   final String password;
-  final String? organization;
 
   EntitiesUser({
     required this.uid,
     required this.name,
     required this.email,
     required this.password,
-    this.organization,
   });
 
   EntitiesUser copyWith({
@@ -18,14 +16,12 @@ class EntitiesUser {
     String? name,
     String? email,
     String? password,
-    String? organization,
   }) {
     return EntitiesUser(
       uid: uid ?? this.uid,
       name: name ?? this.name,
       email: email ?? this.email,
       password: password ?? this.password,
-      organization: organization ?? this.organization,
     );
   }
 
@@ -35,7 +31,6 @@ class EntitiesUser {
       name: map['name'],
       email: map['email'],
       password: map['password'],
-      organization: map['organization'],
     );
   }
 
@@ -45,7 +40,6 @@ class EntitiesUser {
       'name': name,
       'email': email,
       'password': password,
-      'organization': organization,
     };
   }
 }

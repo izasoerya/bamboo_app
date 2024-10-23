@@ -1,5 +1,4 @@
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
-import 'package:bamboo_app/src/app/presentation/widgets/atom/role_account.dart';
 import 'package:bamboo_app/src/domain/entities/e_user.dart';
 import 'package:bamboo_app/src/domain/service/s_user.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _validatorName = TextfieldValidator.name;
   final _validatorEmail = TextfieldValidator.email;
   final _validatorPassword = TextfieldValidator.password;
-  bool isUser = true;
 
   @override
   void dispose() {
@@ -47,8 +45,6 @@ class _RegisterPageState extends State<RegisterPage> {
             heading: 'Daftar',
             subheading: 'Daftar untuk Melanjutkan',
           ),
-          SizedBox(height: 0.03.sh),
-          RoleAccount(onChanged: (bool isUser) => isUser = isUser),
           SizedBox(height: 0.03.sh),
           AuthTextField(
             controller: _controllerName,
@@ -85,11 +81,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 onPressed: () async {
                   final res = await ServiceUser().signUp(
                     EntitiesUser(
-                        uid: '',
-                        name: _controllerName.text,
-                        email: _controllerEmail.text,
-                        password: _controllerPassword.text,
-                        organization: isUser ? 'User' : 'Admin'),
+                      uid: '',
+                      name: _controllerName.text,
+                      email: _controllerEmail.text,
+                      password: _controllerPassword.text,
+                    ),
                   );
                   if (res != null) router.go('/login');
                   ScaffoldMessenger.of(context).showSnackBar(

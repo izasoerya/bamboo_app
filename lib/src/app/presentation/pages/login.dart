@@ -1,5 +1,4 @@
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
-import 'package:bamboo_app/src/app/presentation/widgets/atom/role_account.dart';
 import 'package:bamboo_app/src/domain/service/s_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final _controllerPassword = TextEditingController();
   final _validatorEmail = TextfieldValidator.email;
   final _validatorPassword = TextfieldValidator.password;
-  bool isUser = true;
 
   @override
   void dispose() {
@@ -43,8 +41,6 @@ class _LoginPageState extends State<LoginPage> {
             heading: 'Masuk',
             subheading: 'Masuk untuk Melanjutkan',
           ),
-          SizedBox(height: 0.03.sh),
-          RoleAccount(onChanged: (bool isUser) => isUser = isUser),
           SizedBox(height: 0.03.sh),
           AuthTextField(
             controller: _controllerEmail,
