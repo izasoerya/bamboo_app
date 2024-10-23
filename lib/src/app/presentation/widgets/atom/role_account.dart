@@ -14,7 +14,7 @@ class _RoleAccountState extends State<RoleAccount> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () => setState(() {
@@ -26,7 +26,10 @@ class _RoleAccountState extends State<RoleAccount> {
             padding: EdgeInsets.symmetric(vertical: 0.025.sw),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                bottomLeft: Radius.circular(5),
+              ),
               color: _selectedRole
                   ? Colors.blue
                   : Theme.of(context).colorScheme.secondary,
@@ -58,7 +61,7 @@ class _RoleAccountState extends State<RoleAccount> {
             padding: EdgeInsets.symmetric(vertical: 0.025.sw),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.only(),
               color: _selectedRole
                   ? Theme.of(context).colorScheme.secondary
                   : Colors.blue,
@@ -68,7 +71,7 @@ class _RoleAccountState extends State<RoleAccount> {
                       Theme.of(context).colorScheme.secondary.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 5,
-                  offset: const Offset(0, 3),
+                  offset: const Offset(3, 0),
                 ),
               ],
             ),

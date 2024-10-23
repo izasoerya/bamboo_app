@@ -1,4 +1,11 @@
 class TextfieldValidator {
+  static String? name(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your name';
+    }
+    return null;
+  }
+
   static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';

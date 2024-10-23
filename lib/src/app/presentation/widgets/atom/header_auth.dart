@@ -23,7 +23,7 @@ class HeaderAuth extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Masuk',
+                heading,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyLarge!.color,
                   fontSize: 24.sp,
@@ -31,7 +31,7 @@ class HeaderAuth extends StatelessWidget {
                 ),
               ),
               Text(
-                'Masuk Untuk Melanjutkan',
+                subheading,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium!.color,
                   fontSize: 12.sp,
