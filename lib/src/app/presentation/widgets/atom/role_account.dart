@@ -22,7 +22,7 @@ class _RoleAccountState extends State<RoleAccount> {
             _selectedRole = true;
           }),
           child: Container(
-            width: 0.375.sw,
+            width: 0.3.sw,
             padding: EdgeInsets.symmetric(vertical: 0.025.sw),
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -54,7 +54,7 @@ class _RoleAccountState extends State<RoleAccount> {
             _selectedRole = false;
           }),
           child: Container(
-            width: 0.375.sw,
+            width: 0.3.sw,
             padding: EdgeInsets.symmetric(vertical: 0.025.sw),
             alignment: Alignment.center,
             decoration: BoxDecoration(

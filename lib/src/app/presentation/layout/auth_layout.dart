@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AuthLayout extends StatelessWidget {
   final Widget child;
@@ -7,7 +8,18 @@ class AuthLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: Center(
+        child: IntrinsicHeight(
+          child: SingleChildScrollView(
+            child: Container(
+              width: 1.sw,
+              padding: EdgeInsets.symmetric(horizontal: 0.075.sw),
+              alignment: Alignment.center,
+              child: child,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
