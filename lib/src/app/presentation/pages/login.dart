@@ -1,3 +1,4 @@
+import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/role_account.dart';
 import 'package:bamboo_app/src/domain/service/s_user.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bamboo_app/src/app/routes/routes.dart';
 import 'package:bamboo_app/src/app/use_cases/textfield_validator.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
-import 'package:bamboo_app/src/app/presentation/widgets/atom/toggle_ui_mode.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -38,34 +38,9 @@ class _LoginPageState extends State<LoginPage> {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Masuk',
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Masuk Untuk Melanjutkan',
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium!.color,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const ToggleUIModeButton(),
-            ],
+          const HeaderAuth(
+            heading: 'Masuk',
+            subheading: 'Masuk untuk Melanjutkan',
           ),
           SizedBox(height: 0.03.sh),
           RoleAccount(onChanged: (bool isUser) => print(isUser)),
