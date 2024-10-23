@@ -2,7 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EntitiesPolygon {
   final String uid;
-  final String uidUser;
+  final List<String> uidUser;
   final String name;
   final List<LatLng> polygon;
 
@@ -16,7 +16,7 @@ class EntitiesPolygon {
   EntitiesPolygon copyWith({
     String? uid,
     String? name,
-    String? uidUser,
+    List<String>? uidUser,
     List<LatLng>? polygon,
   }) {
     return EntitiesPolygon(
