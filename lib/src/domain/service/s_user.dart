@@ -10,9 +10,10 @@ class ServiceUser {
 
   Future<EntitiesUser?> signIn(String email, String password) async {
     if (TextfieldValidator.email(email) != null ||
-        TextfieldValidator.email(password) != null) {
+        TextfieldValidator.password(password) != null) {
       return null;
     }
+
     final res = await InfrastructureUser().readUser(email);
     if (res != null) {
       if (res.password == password) {

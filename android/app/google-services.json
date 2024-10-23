@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "93202021060",
+    "project_id": "bambookkn-2a364",
+    "storage_bucket": "bambookkn-2a364.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93202021060:android:f28591efb778b87a0aa791",
+        "android_client_info": {
+          "package_name": "com.example.bamboo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY8qjRRcZtc-Y6QRgil9mFvgTWW6usJvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

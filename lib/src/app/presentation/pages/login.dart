@@ -106,6 +106,11 @@ class _LoginPageState extends State<LoginPage> {
                       _controllerPassword.text,
                     );
                     if (res != null) router.go('/dashboard');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Email atau Password Salah'),
+                      ),
+                    );
                   },
                   child: Text(
                     'Login',

@@ -29,7 +29,7 @@ class EntitiesUser {
     );
   }
 
-  factory EntitiesUser.fromMap(Map<String, dynamic> map) {
+  factory EntitiesUser.fromJSON(Map<String, dynamic> map) {
     return EntitiesUser(
       uid: map['uid'],
       name: map['name'],
