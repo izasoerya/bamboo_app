@@ -45,10 +45,15 @@ class _DashboardPageState extends State<DashboardPage> {
           LatLng(37.7949, -122.4194),
           LatLng(37.7849, -122.4094),
         ],
+        consumeTapEvents: true,
         strokeColor: Colors.blue,
         strokeWidth: 3,
-        fillColor: Colors.blue.withOpacity(0.2),
-        onTap: () => print('Tapped on polygon'),
+        fillColor: Colors.blue.withOpacity(0.3),
+        onTap: () {
+          setState(() {
+            print('Tapped on polygon');
+          });
+        },
       ),
     );
   }
@@ -77,7 +82,7 @@ class _DashboardPageState extends State<DashboardPage> {
       body: GoogleMap(
         initialCameraPosition: const CameraPosition(
           target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-          zoom: 10,
+          zoom: 13,
         ),
         markers: _markers,
         polygons: _polygons,
