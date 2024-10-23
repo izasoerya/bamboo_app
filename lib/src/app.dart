@@ -17,6 +17,10 @@ class MyApp extends StatelessWidget {
         child: BlocBuilder<ThemeStateBloc, ThemeState>(
           builder: (context, state) {
             return MaterialApp.router(
+              themeAnimationStyle: AnimationStyle(
+                curve: Curves.easeInCirc,
+                duration: const Duration(milliseconds: 500),
+              ),
               restorationScopeId: 'app',
               theme: UiMode.lightMode,
               darkTheme: UiMode.darkMode,
