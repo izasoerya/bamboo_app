@@ -89,6 +89,10 @@ class _LoginPageState extends State<LoginPage> {
               label: 'Password',
             ),
             SizedBox(height: 0.02.sh),
+            ElevatedButton(
+              onPressed: () => router.go('/dashboard'),
+              child: Text('Bypass Login'),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

@@ -24,10 +24,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _addMarker() {
     _markers.add(
-      Marker(
-        markerId: const MarkerId('marker_1'),
-        position: const LatLng(37.7749, -122.4194), // San Francisco coordinates
-        infoWindow: const InfoWindow(
+      const Marker(
+        markerId: MarkerId('marker_1'),
+        position: LatLng(37.7749, -122.4194), // San Francisco coordinates
+        infoWindow: InfoWindow(
           title: 'San Francisco',
           snippet: 'An interesting city',
         ),
@@ -60,9 +60,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _addPolyline() {
     _polylines.add(
-      Polyline(
-        polylineId: const PolylineId('polyline_1'),
-        points: const [
+      const Polyline(
+        polylineId: PolylineId('polyline_1'),
+        points: [
           LatLng(37.7749, -122.4194),
           LatLng(37.7849, -122.4294),
           LatLng(37.7949, -122.4194),
