@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EntitiesPolygon {
@@ -34,10 +35,15 @@ class EntitiesPolygon {
   factory EntitiesPolygon.fromJSON(Map<String, dynamic> json) {
     return EntitiesPolygon(
       uid: json['uid'],
-      uidUser: json['uidUser'],
+      uidUser: List<String>.from(json['uidUser']),
       name: json['name'],
-      polygon: json['polygon'],
-      createdAt: json['createdAt'],
+      polygon: (json['polygon'] as List)
+          .map((item) => LatLng(
+                (item as GeoPoint).latitude,
+                item.longitude,
+              ))
+          .toList(),
+      createdAt: (json['createdAt'] as Timestamp).toDate(),
     );
   }
 
@@ -47,7 +53,7 @@ class EntitiesPolygon {
       'uidUser': uidUser,
       'name': name,
       'polygon': polygon,
-      'createdAt': createdAt,
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 }

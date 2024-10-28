@@ -1,4 +1,5 @@
 import 'package:bamboo_app/src/app/blocs/user_logged_state.dart';
+import 'package:bamboo_app/src/domain/infrastructure/i_polygon.dart';
 import 'package:bamboo_app/utils/default_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  late GoogleMapController _mapController;
+  late GoogleMapController _mapsHandler;
   final Set<Marker> _markers = {};
   final Set<Polygon> _polygons = {};
   final Set<Polyline> _polylines = {};
@@ -21,8 +22,6 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _addMarker();
-    _addPolygon();
-    _addPolyline();
   }
 
   void _addMarker() {
@@ -38,62 +37,48 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  void _addPolygon() {
-    _polygons.add(
-      Polygon(
-        polygonId: const PolygonId('polygon_1'),
-        points: const [
-          LatLng(37.7749, -122.4194),
-          LatLng(37.7849, -122.4294),
-          LatLng(37.7949, -122.4194),
-          LatLng(37.7849, -122.4094),
-        ],
-        consumeTapEvents: true,
-        strokeColor: Colors.blue,
-        strokeWidth: 3,
-        fillColor: Colors.blue.withOpacity(0.3),
-        onTap: () {
-          setState(() {
-            print('Tapped on polygon');
-          });
-        },
-      ),
-    );
-  }
-
-  void _addPolyline() {
-    _polylines.add(
-      const Polyline(
-        polylineId: PolylineId('polyline_1'),
-        points: [
-          LatLng(37.7749, -122.4194),
-          LatLng(37.7849, -122.4294),
-          LatLng(37.7949, -122.4194),
-        ],
-        color: Colors.red,
-        width: 3,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(defaultUser.name)),
       body: Stack(
         children: [
-          GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-              zoom: 13,
-            ),
-            markers: _markers,
-            polygons: _polygons,
-            polylines: _polylines,
-            onMapCreated: (GoogleMapController controller) {
-              _mapController = controller;
-            },
-          ),
+          FutureBuilder(
+              future: InfrastructurePolygon().readPolygons(defaultUser.uid),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  final data = snapshot.data;
+                  data!.forEach((element) {
+                    _polygons.add(Polygon(
+                      polygonId: PolygonId(element!.uid),
+                      points: element.polygon,
+                      strokeWidth: 2,
+                      strokeColor: Colors.red,
+                      fillColor: Colors.red.withOpacity(0.5),
+                    ));
+                  });
+                  return GoogleMap(
+                      initialCameraPosition: const CameraPosition(
+                        target: LatLng(
+                            37.7749, -122.4194), // San Francisco coordinates
+                        zoom: 13,
+                      ),
+                      markers: _markers,
+                      polygons: _polygons,
+                      polylines: _polylines,
+                      onMapCreated: (GoogleMapController handler) =>
+                          _mapsHandler = handler);
+                }
+                return const Center(child: Text('No data'));
+              }),
+          ElevatedButton(
+              onPressed: () async =>
+                  await InfrastructurePolygon().readPolygons(defaultUser.uid),
+              child: const Text('Read Polygon')),
         ],
       ),
     );
