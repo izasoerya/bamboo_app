@@ -1,4 +1,7 @@
+import 'package:bamboo_app/src/app/blocs/user_logged_state.dart';
+import 'package:bamboo_app/utils/default_user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -76,20 +79,22 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-      ),
-      body: GoogleMap(
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-          zoom: 13,
-        ),
-        markers: _markers,
-        polygons: _polygons,
-        polylines: _polylines,
-        onMapCreated: (GoogleMapController controller) {
-          _mapController = controller;
-        },
+      appBar: AppBar(title: Text(defaultUser.name)),
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+              zoom: 13,
+            ),
+            markers: _markers,
+            polygons: _polygons,
+            polylines: _polylines,
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+            },
+          ),
+        ],
       ),
     );
   }

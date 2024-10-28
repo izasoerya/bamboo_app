@@ -1,6 +1,9 @@
+import 'package:bamboo_app/src/app/blocs/user_logged_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
 import 'package:bamboo_app/src/domain/service/s_user.dart';
+import 'package:bamboo_app/utils/default_user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:bamboo_app/src/app/routes/routes.dart';
@@ -29,78 +32,86 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 0.05.sw, vertical: 0.05.sh),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          const HeaderAuth(
-            heading: 'Masuk',
-            subheading: 'Masuk untuk Melanjutkan',
+    return BlocBuilder<UserLoggedStateBloc, UserLoggedState>(
+      builder: (context, state) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 0.05.sw, vertical: 0.05.sh),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(10),
           ),
-          SizedBox(height: 0.03.sh),
-          AuthTextField(
-            controller: _controllerEmail,
-            validator: _validatorEmail,
-            hintText: 'Email',
-            label: 'Email',
-          ),
-          SizedBox(height: 0.02.sh),
-          AuthTextField(
-            controller: _controllerPassword,
-            validator: _validatorPassword,
-            hintText: 'Password',
-            label: 'Password',
-          ),
-          SizedBox(height: 0.02.sh),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              ElevatedButton(
-                style: ButtonStyle(
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+              const HeaderAuth(
+                heading: 'Masuk',
+                subheading: 'Masuk untuk Melanjutkan',
+              ),
+              SizedBox(height: 0.03.sh),
+              AuthTextField(
+                controller: _controllerEmail,
+                validator: _validatorEmail,
+                hintText: 'Email',
+                label: 'Email',
+              ),
+              SizedBox(height: 0.02.sh),
+              AuthTextField(
+                controller: _controllerPassword,
+                validator: _validatorPassword,
+                hintText: 'Password',
+                label: 'Password',
+              ),
+              SizedBox(height: 0.02.sh),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final res = await ServiceUser().signIn(
+                        _controllerEmail.text,
+                        _controllerPassword.text,
+                      );
+                      if (res != null) {
+                        defaultUser = res;
+                        router.go('/dashboard');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Email atau Password Salah'),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      'Login',
+                      style: Theme.of(context).textTheme.bodyLarge!,
                     ),
                   ),
-                ),
-                onPressed: () async {
-                  final res = await ServiceUser().signIn(
-                    _controllerEmail.text,
-                    _controllerPassword.text,
-                  );
-                  if (res != null) router.go('/dashboard');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email atau Password Salah'),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Login',
-                  style: Theme.of(context).textTheme.bodyLarge!,
-                ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Lupa Password?'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 0.025.sh),
+              TextButton(
+                onPressed: () => router.go('/register'),
+                child: const Text('Belum Punya Akun? Buat Akun'),
               ),
               TextButton(
-                onPressed: () {},
-                child: const Text('Lupa Password?'),
+                onPressed: () => router.go('/dashboard'),
+                child: const Text('Bypass Login'),
               ),
             ],
           ),
-          SizedBox(height: 0.025.sh),
-          TextButton(
-            onPressed: () => router.go('/register'),
-            child: const Text('Belum Punya Akun? Buat Akun'),
-          ),
-          TextButton(
-            onPressed: () => router.go('/dashboard'),
-            child: const Text('Bypass Login'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
