@@ -1,4 +1,6 @@
+import 'package:bamboo_app/src/app/blocs/polygon_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppLayout extends StatelessWidget {
   final Widget child;
@@ -7,7 +9,10 @@ class AppLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: child),
+      body: BlocProvider(
+        create: (context) => PolygonStateBloc(),
+        child: SafeArea(child: child),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 50,
