@@ -7,9 +7,16 @@ class InfrastructurePolygon implements RepositoryPolygon {
   final Uuid _uuid = const Uuid();
   final db = FirebaseFirestore.instance;
   @override
-  Future<EntitiesPolygon?> createPolygon(EntitiesPolygon polygon) {
-    // TODO: implement createPolygon
-    throw UnimplementedError();
+  Future<EntitiesPolygon?> createPolygon(EntitiesPolygon polygon) async {
+    await db
+        .collection('polygons')
+        .doc()
+        .set(polygon.copyWith(uid: _uuid.v4()).toJSON())
+        .onError((error, stackTrace) {
+      print('Error: $error');
+      return null;
+    });
+    return polygon;
   }
 
   @override
