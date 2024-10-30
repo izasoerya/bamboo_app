@@ -1,5 +1,5 @@
-import 'package:bamboo_app/src/app/blocs/user_logged_state.dart';
-import 'package:bamboo_app/src/domain/infrastructure/i_polygon.dart';
+import 'package:bamboo_app/src/app/blocs/polygon_state.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/modal_callback.dart';
 import 'package:bamboo_app/utils/default_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +13,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  late GoogleMapController _mapsHandler;
+  late GoogleMapController _mapController;
   final Set<Marker> _markers = {};
   final Set<Polygon> _polygons = {};
   final Set<Polyline> _polylines = {};
@@ -22,6 +22,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _addMarker();
+    BlocProvider.of<PolygonStateBloc>(context).add(FetchPolygonData());
   }
 
   void _addMarker() {
@@ -37,49 +38,45 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  void _tapCallBack(LatLng argument) {
+    showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return const ModalCallback();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(defaultUser.name)),
-      body: Stack(
-        children: [
-          FutureBuilder(
-              future: InfrastructurePolygon().readPolygons(defaultUser.uid),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  final data = snapshot.data;
-                  data!.forEach((element) {
-                    _polygons.add(Polygon(
-                      polygonId: PolygonId(element!.uid),
-                      points: element.polygon,
-                      strokeWidth: 2,
-                      strokeColor: Colors.red,
-                      fillColor: Colors.red.withOpacity(0.5),
-                    ));
-                  });
-                  return GoogleMap(
-                      initialCameraPosition: const CameraPosition(
-                        target: LatLng(
-                            37.7749, -122.4194), // San Francisco coordinates
-                        zoom: 13,
-                      ),
-                      markers: _markers,
-                      polygons: _polygons,
-                      polylines: _polylines,
-                      onMapCreated: (GoogleMapController handler) =>
-                          _mapsHandler = handler);
-                }
-                return const Center(child: Text('No data'));
-              }),
-          ElevatedButton(
-              onPressed: () async =>
-                  await InfrastructurePolygon().readPolygons(defaultUser.uid),
-              child: const Text('Read Polygon')),
-        ],
+      body: BlocBuilder<PolygonStateBloc, PolygonState>(
+        builder: (context, state) {
+          final data = state.polygons;
+          for (var element in data) {
+            _polygons.add(Polygon(
+              polygonId: PolygonId(element!.uid),
+              points: element.polygon,
+              strokeWidth: 2,
+              strokeColor: Colors.lightBlue,
+              fillColor: Colors.lightBlue.withOpacity(0.5),
+            ));
+          }
+          return GoogleMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+                zoom: 13,
+              ),
+              markers: _markers,
+              polygons: _polygons,
+              polylines: _polylines,
+              onTap: (argument) {
+                _mapController.animateCamera(CameraUpdate.newLatLng(argument));
+                _tapCallBack(argument);
+              },
+              onMapCreated: (GoogleMapController handler) =>
+                  _mapController = handler);
+        },
       ),
     );
   }
