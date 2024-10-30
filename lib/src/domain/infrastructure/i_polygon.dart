@@ -36,7 +36,6 @@ class InfrastructurePolygon implements RepositoryPolygon {
         .where('uidUser', arrayContains: uidUser)
         .get();
     if (polygons.docs.isNotEmpty) {
-      print(polygons.docs.first.data());
       return polygons.docs
           .map((e) => EntitiesPolygon.fromJSON(e.data()))
           .toList();
