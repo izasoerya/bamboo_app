@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bamboo_app/src/app/blocs/polygon_state.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:bamboo_app/src/app/presentation/widgets/atom/modal_callback.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -12,8 +11,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  late GoogleMapController _mapController;
-  final Set<Polygon> _polygons = {};
+  final Set<Marker> _markers = {};
 
   @override
   void initState() {
@@ -21,43 +19,32 @@ class _DashboardPageState extends State<DashboardPage> {
     BlocProvider.of<PolygonStateBloc>(context).add(FetchPolygonData());
   }
 
-  void _tapCallBack(String polygonID, GoogleMapController controller) {
-    controller.animateCamera(CameraUpdate.newLatLng(_polygons
-        .where((element) => element.polygonId.value == polygonID)
-        .first
-        .points
-        .first));
-    showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return const ModalCallback();
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolygonStateBloc, PolygonState>(
       builder: (context, state) {
-        final polygonsUser = state.polygons;
-        for (var data in polygonsUser) {
-          _polygons.add(Polygon(
-            polygonId: PolygonId(data!.uid),
-            points: data.polygon,
-            strokeWidth: 2,
-            strokeColor: Colors.lightBlue,
-            fillColor: Colors.lightBlue.withOpacity(0.5),
-            consumeTapEvents: true,
-            onTap: () => _tapCallBack(data.uid, _mapController),
-          ));
+        final markerBamboo = state.polygons;
+        for (var data in markerBamboo) {
+          if (data == null) {
+            continue;
+          }
+          _markers.add(
+            Marker(
+              markerId: MarkerId(data.uid),
+              position: data.polygon,
+              infoWindow:
+                  InfoWindow(title: data.name, snippet: data.description),
+            ),
+          );
         }
         return GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-              zoom: 13,
-            ),
-            polygons: _polygons,
-            onMapCreated: (GoogleMapController controller) =>
-                _mapController = controller);
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+            zoom: 14,
+          ),
+          zoomControlsEnabled: false,
+          markers: _markers,
+        );
       },
     );
   }

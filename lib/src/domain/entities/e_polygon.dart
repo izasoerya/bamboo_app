@@ -7,7 +7,7 @@ class EntitiesPolygon {
   final List<String> uidUser;
   final String name;
   final String description;
-  final List<LatLng> polygon;
+  final LatLng polygon;
   final DateTime createdAt;
 
   EntitiesPolygon({
@@ -26,7 +26,7 @@ class EntitiesPolygon {
     List<String>? uidUser,
     String? name,
     String? description,
-    List<LatLng>? polygon,
+    LatLng? polygon,
     DateTime? createdAt,
   }) {
     return EntitiesPolygon(
@@ -47,12 +47,10 @@ class EntitiesPolygon {
       uidUser: List<String>.from(json['uidUser']),
       name: json['name'],
       description: json['description'],
-      polygon: (json['polygon'] as List)
-          .map((item) => LatLng(
-                (item as GeoPoint).latitude,
-                item.longitude,
-              ))
-          .toList(),
+      polygon: LatLng(
+        (json['polygon'] as GeoPoint).latitude,
+        (json['polygon'] as GeoPoint).longitude,
+      ),
       createdAt: (json['createdAt'] as Timestamp).toDate(),
     );
   }
@@ -64,9 +62,7 @@ class EntitiesPolygon {
       'uidUser': uidUser,
       'name': name,
       'description': description,
-      'polygon': polygon
-          .map((item) => GeoPoint(item.latitude, item.longitude))
-          .toList(),
+      'polygon': [GeoPoint(polygon.latitude, polygon.longitude)],
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }

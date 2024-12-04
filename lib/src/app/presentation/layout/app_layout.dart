@@ -11,13 +11,23 @@ class AppLayout extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => PolygonStateBloc(),
-        child: SafeArea(child: child),
+        child: child,
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }
