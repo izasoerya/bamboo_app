@@ -1,3 +1,4 @@
+import 'package:bamboo_app/src/app/use_cases/marker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
@@ -11,7 +12,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
 
   @override
   void initState() {
@@ -23,20 +24,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<MarkerStateBloc, MarkerState>(
       builder: (context, state) {
-        final markerBamboo = state.markers;
-        for (var data in markerBamboo) {
-          if (data == null) {
-            continue;
-          }
-          _markers.add(
-            Marker(
-              markerId: MarkerId(data.uid),
-              position: data.marker,
-              infoWindow:
-                  InfoWindow(title: data.name, snippet: data.description),
-            ),
-          );
-        }
+        _markers = MarkerController().fetchListMarker(state.markers);
+
         return GoogleMap(
           initialCameraPosition: const CameraPosition(
             target: LatLng(37.7749, -122.4194), // San Francisco coordinates

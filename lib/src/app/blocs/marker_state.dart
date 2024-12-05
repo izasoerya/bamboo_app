@@ -8,15 +8,16 @@ abstract class MarkerEvent {}
 class FetchMarkerData extends MarkerEvent {}
 
 class MarkerState {
-  final List<EntitiesMarker?> markers;
+  final Set<EntitiesMarker> markers;
 
   MarkerState({required this.markers});
 }
 
 class MarkerStateBloc extends Bloc<MarkerEvent, MarkerState> {
-  MarkerStateBloc() : super(MarkerState(markers: [])) {
+  MarkerStateBloc() : super(MarkerState(markers: {})) {
     on<FetchMarkerData>((event, emit) async {
       final markers = await ServiceMarker().fetchPolygon(defaultUser.uid);
+
       emit(MarkerState(markers: markers));
     });
   }
