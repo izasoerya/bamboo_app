@@ -1,12 +1,14 @@
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/modal_snackbar.dart';
+import 'package:bamboo_app/src/app/use_cases/auth_controller.dart';
 import 'package:bamboo_app/src/domain/entities/e_user.dart';
-import 'package:bamboo_app/src/domain/service/s_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:bamboo_app/src/app/routes/routes.dart';
 import 'package:bamboo_app/utils/textfield_validator.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -19,9 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _controllerName = TextEditingController();
   final _controllerEmail = TextEditingController();
   final _controllerPassword = TextEditingController();
-  final _validatorName = TextfieldValidator.name;
-  final _validatorEmail = TextfieldValidator.email;
-  final _validatorPassword = TextfieldValidator.password;
+  final Uuid _uuid = const Uuid();
 
   @override
   void dispose() {
@@ -48,21 +48,21 @@ class _RegisterPageState extends State<RegisterPage> {
           SizedBox(height: 0.03.sh),
           AuthTextField(
             controller: _controllerName,
-            validator: _validatorName,
+            validator: TextfieldValidator.validator(TextFieldType.name),
             hintText: 'Nama',
             label: 'Nama',
           ),
           SizedBox(height: 0.02.sh),
           AuthTextField(
             controller: _controllerEmail,
-            validator: _validatorEmail,
+            validator: TextfieldValidator.validator(TextFieldType.email),
             hintText: 'Email',
             label: 'Email',
           ),
           SizedBox(height: 0.02.sh),
           AuthTextField(
             controller: _controllerPassword,
-            validator: _validatorPassword,
+            validator: TextfieldValidator.validator(TextFieldType.password),
             hintText: 'Password',
             label: 'Password',
           ),
@@ -79,20 +79,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 onPressed: () async {
-                  final res = await ServiceUser().signUp(
+                  final res = await const AuthController().signUp(
                     EntitiesUser(
-                      uid: '',
+                      uid: _uuid.v4(),
                       name: _controllerName.text,
                       email: _controllerEmail.text,
                       password: _controllerPassword.text,
                     ),
                   );
-                  if (res != null) router.go('/login');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email atau Password Salah'),
-                    ),
-                  );
+                  if (context.mounted) {
+                    res
+                        ? ModalSnackbar(context).show('Daftar Berhasil')
+                        : ModalSnackbar(context).show('Daftar Gagal');
+                  }
                 },
                 child: Text(
                   'Daftar',

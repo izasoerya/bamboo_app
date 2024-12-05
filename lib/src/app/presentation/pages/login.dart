@@ -1,11 +1,10 @@
-import 'package:bamboo_app/src/app/blocs/user_logged_state.dart';
-import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
-import 'package:bamboo_app/src/domain/service/s_user.dart';
-import 'package:bamboo_app/utils/default_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:bamboo_app/src/app/blocs/user_logged_state.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/modal_snackbar.dart';
+import 'package:bamboo_app/src/app/use_cases/auth_controller.dart';
 import 'package:bamboo_app/src/app/routes/routes.dart';
 import 'package:bamboo_app/utils/textfield_validator.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
@@ -20,8 +19,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _controllerEmail = TextEditingController();
   final _controllerPassword = TextEditingController();
-  final _validatorEmail = TextfieldValidator.email;
-  final _validatorPassword = TextfieldValidator.password;
 
   @override
   void dispose() {
@@ -49,14 +46,14 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 0.03.sh),
               AuthTextField(
                 controller: _controllerEmail,
-                validator: _validatorEmail,
+                validator: TextfieldValidator.validator(TextFieldType.email),
                 hintText: 'Email',
                 label: 'Email',
               ),
               SizedBox(height: 0.02.sh),
               AuthTextField(
                 controller: _controllerPassword,
-                validator: _validatorPassword,
+                validator: TextfieldValidator.validator(TextFieldType.password),
                 hintText: 'Password',
                 label: 'Password',
               ),
@@ -73,19 +70,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     onPressed: () async {
-                      final res = await ServiceUser().signIn(
+                      final res = await const AuthController().signIn(
                         _controllerEmail.text,
                         _controllerPassword.text,
                       );
-                      if (res != null) {
-                        defaultUser = res;
-                        router.go('/dashboard');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Email atau Password Salah'),
-                          ),
-                        );
+                      if (context.mounted) {
+                        res
+                            ? ModalSnackbar(context).show('Login Berhasil')
+                            : ModalSnackbar(context).show('Login Gagal');
                       }
                     },
                     child: Text(

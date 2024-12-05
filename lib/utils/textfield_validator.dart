@@ -1,4 +1,17 @@
+enum TextFieldType { name, email, password }
+
 class TextfieldValidator {
+  static String? Function(String?)? validator(TextFieldType type) {
+    switch (type) {
+      case TextFieldType.name:
+        return name;
+      case TextFieldType.email:
+        return email;
+      case TextFieldType.password:
+        return password;
+    }
+  }
+
   static String? name(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your name';
