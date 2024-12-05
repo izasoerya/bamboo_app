@@ -32,6 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
             zoom: 14,
           ),
           zoomControlsEnabled: false,
+          myLocationEnabled: true,
           markers: _markers,
         );
       },
