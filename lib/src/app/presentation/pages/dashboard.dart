@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bamboo_app/src/app/blocs/polygon_state.dart';
+import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -16,12 +16,12 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<PolygonStateBloc>(context).add(FetchPolygonData());
+    BlocProvider.of<MarkerStateBloc>(context).add(FetchMarkerData());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PolygonStateBloc, PolygonState>(
+    return BlocBuilder<MarkerStateBloc, MarkerState>(
       builder: (context, state) {
         final markerBamboo = state.polygons;
         for (var data in markerBamboo) {
@@ -31,7 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
           _markers.add(
             Marker(
               markerId: MarkerId(data.uid),
-              position: data.polygon,
+              position: data.marker,
               infoWindow:
                   InfoWindow(title: data.name, snippet: data.description),
             ),

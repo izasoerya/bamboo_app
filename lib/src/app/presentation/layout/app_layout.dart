@@ -1,4 +1,4 @@
-import 'package:bamboo_app/src/app/blocs/polygon_state.dart';
+import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +10,7 @@ class AppLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => PolygonStateBloc(),
+        create: (context) => MarkerStateBloc(),
         child: child,
       ),
       bottomNavigationBar: BottomNavigationBar(
