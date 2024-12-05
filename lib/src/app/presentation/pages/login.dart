@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:bamboo_app/src/app/routes/routes.dart';
-import 'package:bamboo_app/src/app/use_cases/textfield_validator.dart';
+import 'package:bamboo_app/utils/textfield_validator.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
 
 class LoginPage extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:bamboo_app/src/app/use_cases/textfield_validator.dart';
+import 'package:bamboo_app/utils/textfield_validator.dart';
 import 'package:bamboo_app/src/domain/entities/e_user.dart';
 import 'package:bamboo_app/src/domain/infrastructure/i_user.dart';
 

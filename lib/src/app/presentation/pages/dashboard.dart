@@ -23,7 +23,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<MarkerStateBloc, MarkerState>(
       builder: (context, state) {
-        final markerBamboo = state.polygons;
+        final markerBamboo = state.markers;
         for (var data in markerBamboo) {
           if (data == null) {
             continue;
