@@ -1,3 +1,4 @@
+import 'package:bamboo_app/src/app/presentation/widgets/atom/add_button.dart';
 import 'package:bamboo_app/src/app/use_cases/marker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,14 +27,25 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (context, state) {
         _markers = MarkerController().fetchListMarker(state.markers);
 
-        return GoogleMap(
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-            zoom: 14,
-          ),
-          zoomControlsEnabled: false,
-          myLocationEnabled: true,
-          markers: _markers,
+        return Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+                zoom: 14,
+              ),
+              zoomControlsEnabled: false,
+              myLocationEnabled: true,
+              markers: _markers,
+            ),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: AddButton(onTap: () {
+                print('Add button tapped');
+              }),
+            ),
+          ],
         );
       },
     );
