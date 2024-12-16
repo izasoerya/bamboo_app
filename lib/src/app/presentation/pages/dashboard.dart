@@ -3,6 +3,7 @@ import 'package:bamboo_app/src/app/use_cases/marker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -41,8 +42,9 @@ class _DashboardPageState extends State<DashboardPage> {
             Positioned(
               bottom: 20,
               right: 20,
-              child: AddButton(onTap: () {
+              child: AddButton(onTap: () async {
                 print('Add button tapped');
+                print(await Geolocator.getCurrentPosition());
               }),
             ),
           ],
