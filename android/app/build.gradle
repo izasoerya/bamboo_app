@@ -11,9 +11,7 @@ plugins {
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader("UTF-8") { reader ->
-        localProperties.load(reader)
-    }
+    localProperties.load(new FileInputStream(localPropertiesFile))
 }
 
 def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
@@ -26,9 +24,7 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
-apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+def apiKey = localProperties.getProperty("GOOGLE_MAPS_API_KEY")
 
 android {
     namespace = "com.example.bamboo_app"
@@ -49,6 +45,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = apiKey
     }
 
     buildTypes {
