@@ -1,6 +1,8 @@
+import 'package:bamboo_app/src/app/presentation/widgets/atom/retry_button.dart';
 import 'package:bamboo_app/src/app/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({super.key});
@@ -10,6 +12,8 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
+  String _error = 'Requesting location permission...';
+
   @override
   void initState() {
     super.initState();
@@ -23,9 +27,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
+      setState(() {
+        _error = 'Location services are disabled.';
+      });
       return Future.error('Location services are disabled.');
     }
 
@@ -33,17 +37,15 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
+        setState(() {
+          _error = 'Location permissions are denied, Press Retry to try again';
+        });
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
+      openAppSettings();
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -52,12 +54,18 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Please Grant Location Permission',
-              style: TextStyle(fontSize: 30), textAlign: TextAlign.center),
+          Text(_error,
+              style: TextStyle(
+                fontSize: 24,
+                color: Theme.of(context).textTheme.bodyMedium!.color,
+              ),
+              textAlign: TextAlign.center),
+          const Padding(padding: EdgeInsets.only(top: 20)),
+          RetryButton(onTap: () async => await _requestPermission()),
         ],
       ),
     );
