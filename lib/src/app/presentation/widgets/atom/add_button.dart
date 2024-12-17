@@ -8,7 +8,11 @@ class AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: onTap,
-      child: const Icon(Icons.add, size: 30),
+      child: Icon(
+        Icons.add,
+        size: 30,
+        color: Theme.of(context).textTheme.bodyMedium!.color,
+      ),
     );
   }
 }

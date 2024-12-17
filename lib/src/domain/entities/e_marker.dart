@@ -62,7 +62,7 @@ class EntitiesMarker {
       'uidUser': uidUser,
       'name': name,
       'description': description,
-      'latlng': [GeoPoint(marker.latitude, marker.longitude)],
+      'latlng': GeoPoint(marker.latitude, marker.longitude),
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
