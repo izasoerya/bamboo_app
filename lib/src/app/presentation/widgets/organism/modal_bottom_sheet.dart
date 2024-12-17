@@ -1,5 +1,7 @@
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/submit_button.dart';
 import 'package:bamboo_app/src/domain/entities/e_marker.dart';
 import 'package:bamboo_app/utils/default_user.dart';
 import 'package:bamboo_app/utils/textfield_validator.dart';
@@ -33,9 +35,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           topRight: Radius.circular(20),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0.1.sw),
       child: Column(
         children: [
+          const HeaderAuth(
+            heading: 'Tambahkan Data',
+            subheading: 'Tambahkan data lokasi baru',
+          ),
+          SizedBox(height: 0.03.sh),
           AuthTextField(
             controller: _nameController,
             hintText: 'Name',
@@ -54,26 +61,25 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
             'Simpan lokasi ini?',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          ElevatedButton(
-            onPressed: () async {
-              final position = await Geolocator.getCurrentPosition();
-              BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
-                AddMarkerData(
-                  marker: EntitiesMarker(
-                    uid: '',
-                    uidCreator: defaultUser.uid,
-                    uidUser: [defaultUser.uid],
-                    name: _nameController.text,
-                    description: _descriptionController.text,
-                    marker: LatLng(position.latitude, position.longitude),
-                    createdAt: DateTime.now(),
+          SubmitButton(
+              onTap: () async {
+                final position = await Geolocator.getCurrentPosition();
+                BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                  AddMarkerData(
+                    marker: EntitiesMarker(
+                      uid: '',
+                      uidCreator: defaultUser.uid,
+                      uidUser: [defaultUser.uid],
+                      name: _nameController.text,
+                      description: _descriptionController.text,
+                      marker: LatLng(position.latitude, position.longitude),
+                      createdAt: DateTime.now(),
+                    ),
                   ),
-                ),
-              );
-              Navigator.pop(context);
-            },
-            child: Text('Add', style: Theme.of(context).textTheme.bodyMedium),
-          ),
+                );
+                Navigator.pop(context);
+              },
+              text: 'Tambahkan'),
         ],
       ),
     );
