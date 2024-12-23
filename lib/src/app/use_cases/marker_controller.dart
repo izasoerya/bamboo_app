@@ -8,7 +8,7 @@ class MarkerController {
       listMarker.add(
         Marker(
           markerId: MarkerId(data.uid),
-          position: data.marker,
+          position: data.location,
           infoWindow: InfoWindow(
             title: data.name,
             snippet: data.description,

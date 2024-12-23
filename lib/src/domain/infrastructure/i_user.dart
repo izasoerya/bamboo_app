@@ -1,33 +1,37 @@
 import 'package:bamboo_app/src/domain/entities/e_user.dart';
 import 'package:bamboo_app/src/domain/repositories/r_user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class InfrastructureUser implements RepositoryUser {
   final Uuid _uuid = const Uuid();
-  final db = FirebaseFirestore.instance;
+  final db = Supabase.instance.client;
+
   @override
   Future<EntitiesUser?> createUser(EntitiesUser user) async {
-    await db
-        .collection('users')
-        .doc()
-        .set(user.copyWith(uid: _uuid.v4()).toJSON())
-        .onError((error, stackTrace) {
-      print('Error: $error');
+    try {
+      final res = await db
+          .from('authentication')
+          .insert(user.copyWith(uid: _uuid.v4()).toJSON())
+          .select()
+          .single();
+      return EntitiesUser.fromJSON(res);
+    } catch (e) {
+      print('Error: $e');
       return null;
-    });
-    return user;
+    }
   }
 
   @override
   Future<EntitiesUser?> readUser(String email) async {
-    final user =
-        await db.collection('users').where('email', isEqualTo: email).get();
-    if (user.docs.isNotEmpty) {
-      print(user.docs.first.data());
-      return EntitiesUser.fromJSON(user.docs.first.data());
+    try {
+      final res =
+          await db.from('authentication').select().eq('email', email).single();
+      return EntitiesUser.fromJSON(res);
+    } catch (e) {
+      print('Error: $e');
+      return null;
     }
-    return null;
   }
 
   @override

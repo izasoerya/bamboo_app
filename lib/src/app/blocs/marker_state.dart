@@ -23,7 +23,6 @@ class MarkerStateBloc extends Bloc<MarkerEvent, MarkerState> {
   MarkerStateBloc() : super(MarkerState(markers: {})) {
     on<FetchMarkerData>((event, emit) async {
       final markers = await ServiceMarker().fetchMarker(defaultUser.uid);
-
       emit(MarkerState(markers: markers));
     });
 
