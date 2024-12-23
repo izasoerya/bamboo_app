@@ -9,7 +9,11 @@ class MarkerController {
         Marker(
           markerId: MarkerId(data.uid),
           position: data.marker,
-          infoWindow: InfoWindow(title: data.name, snippet: data.description),
+          infoWindow: InfoWindow(
+            title: data.name,
+            snippet: data.description,
+            onTap: () => print('Tapped Again'),
+          ),
         ),
       );
     }
