@@ -10,17 +10,16 @@ class AuthLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocProvider(
         create: (context) => UserLoggedStateBloc(),
         child: Center(
-          child: IntrinsicHeight(
-            child: SingleChildScrollView(
-              child: Container(
-                width: 1.sw,
-                padding: EdgeInsets.symmetric(horizontal: 0.075.sw),
-                alignment: Alignment.center,
-                child: child,
-              ),
+          child: SingleChildScrollView(
+            child: Container(
+              width: 1.sw,
+              padding: EdgeInsets.symmetric(horizontal: 0.075.sw),
+              alignment: Alignment.center,
+              child: child,
             ),
           ),
         ),

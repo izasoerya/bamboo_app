@@ -25,6 +25,9 @@ class ModalBottomSheet extends StatefulWidget {
 class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _qtyController = TextEditingController();
+  final _ownerNameController = TextEditingController();
+  final _ownerContactController = TextEditingController();
 
   @override
   void initState() {
@@ -34,88 +37,115 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
         ),
-      ),
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0.1.sw),
-      child: Column(
-        children: [
-          const HeaderAuth(
-            heading: 'Tambahkan Data',
-            subheading: 'Tambahkan data lokasi baru',
-          ),
-          SizedBox(height: 0.03.sh),
-          AuthTextField(
-            controller: _nameController,
-            hintText: 'Name',
-            label: 'Name',
-            validator: TextfieldValidator.name,
-          ),
-          SizedBox(height: 0.015.sh),
-          AuthTextField(
-            controller: _descriptionController,
-            hintText: 'Description',
-            label: 'Description',
-            validator: TextfieldValidator.name,
-          ),
-          SizedBox(height: 0.03.sh),
-          Text(
-            'Simpan lokasi ini?',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          SubmitButton(
-              onTap: () async {
-                final position = await Geolocator.getCurrentPosition();
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0.1.sw),
+        child: Column(
+          children: [
+            const HeaderAuth(
+              heading: 'Tambahkan Data',
+              subheading: 'Tambahkan data lokasi baru',
+            ),
+            SizedBox(height: 0.03.sh),
+            AuthTextField(
+              controller: _nameController,
+              hintText: 'Name',
+              label: 'Name',
+              validator: TextfieldValidator.name,
+            ),
+            SizedBox(height: 0.015.sh),
+            AuthTextField(
+              controller: _qtyController,
+              hintText: 'Quantity',
+              label: 'Quantity',
+              validator: TextfieldValidator.name,
+              type: TextInputType.number,
+            ),
+            SizedBox(height: 0.015.sh),
+            AuthTextField(
+              controller: _descriptionController,
+              hintText: 'Description',
+              label: 'Description',
+              optional: true,
+            ),
+            SizedBox(height: 0.015.sh),
+            AuthTextField(
+              controller: _ownerNameController,
+              hintText: 'Nama Pemilik',
+              label: 'Nama Pemilik',
+              optional: true,
+            ),
+            SizedBox(height: 0.015.sh),
+            AuthTextField(
+              controller: _ownerContactController,
+              hintText: 'Nomor Pemilik',
+              label: 'Nomor Pemilik',
+              optional: true,
+              type: TextInputType.phone,
+            ),
+            SizedBox(height: 0.03.sh),
+            Text(
+              'Simpan lokasi ini?',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            SubmitButton(
+                onTap: () async {
+                  final position = await Geolocator.getCurrentPosition();
 
-                if (widget.uidMarker == null) {
-                  BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
-                    AddMarkerData(
-                      marker: EntitiesMarker(
-                        uid: '',
-                        uidCreator: defaultUser.uid,
-                        uidUser: [defaultUser.uid],
-                        name: _nameController.text,
-                        description: _descriptionController.text,
-                        strain: '',
-                        qty: 0,
-                        urlImage: '',
-                        ownerName: defaultUser.name,
-                        ownerContact: defaultUser.email,
-                        location: LatLng(position.latitude, position.longitude),
-                        createdAt: DateTime.now(),
+                  if (widget.uidMarker == null) {
+                    BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                      AddMarkerData(
+                        marker: EntitiesMarker(
+                          uid: '',
+                          uidCreator: defaultUser.uid,
+                          uidUser: [defaultUser.uid],
+                          name: _nameController.text,
+                          description: _descriptionController.text,
+                          strain: '',
+                          qty: 0,
+                          urlImage: '',
+                          ownerName: defaultUser.name,
+                          ownerContact: defaultUser.email,
+                          location:
+                              LatLng(position.latitude, position.longitude),
+                          createdAt: DateTime.now(),
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
-                    UpdateMarkerData(
-                      marker: EntitiesMarker(
-                        uid: widget.uidMarker!,
-                        uidCreator: defaultUser.uid,
-                        uidUser: [defaultUser.uid],
-                        name: _nameController.text,
-                        description: _descriptionController.text,
-                        strain: '',
-                        qty: 0,
-                        urlImage: '',
-                        ownerName: defaultUser.name,
-                        ownerContact: defaultUser.email,
-                        location: LatLng(position.latitude, position.longitude),
-                        createdAt: DateTime.now(),
+                    );
+                  } else {
+                    BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                      UpdateMarkerData(
+                        marker: EntitiesMarker(
+                          uid: widget.uidMarker!,
+                          uidCreator: defaultUser.uid,
+                          uidUser: [defaultUser.uid],
+                          name: _nameController.text,
+                          description: _descriptionController.text,
+                          strain: '',
+                          qty: 0,
+                          urlImage: '',
+                          ownerName: defaultUser.name,
+                          ownerContact: defaultUser.email,
+                          location:
+                              LatLng(position.latitude, position.longitude),
+                          createdAt: DateTime.now(),
+                        ),
                       ),
-                    ),
-                  );
-                }
-                Navigator.pop(context);
-              },
-              text: 'Tambahkan'),
-        ],
+                    );
+                  }
+                  Navigator.pop(context);
+                },
+                text: 'Tambahkan'),
+          ],
+        ),
       ),
     );
   }

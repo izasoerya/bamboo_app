@@ -16,13 +16,15 @@ class MarkerController {
             title: data.name,
             snippet: data.description,
             onTap: () => showModalBottomSheet(
-                context: context,
-                builder: (parentContext) {
-                  return ModalBottomSheet(
-                    uidMarker: data.uid,
-                    parentContext: context,
-                  );
-                }),
+              context: context,
+              isScrollControlled: true,
+              builder: (parentContext) {
+                return ModalBottomSheet(
+                  uidMarker: data.uid,
+                  parentContext: context,
+                );
+              },
+            ),
           ),
         ),
       );

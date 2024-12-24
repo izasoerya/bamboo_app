@@ -6,6 +6,8 @@ class AuthTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final String hintText;
   final String label;
+  final bool optional;
+  final TextInputType type;
 
   const AuthTextField({
     super.key,
@@ -13,6 +15,8 @@ class AuthTextField extends StatefulWidget {
     this.validator,
     this.hintText = '',
     this.label = '',
+    this.optional = false,
+    this.type = TextInputType.text,
   });
 
   @override
@@ -28,13 +32,14 @@ class _AuthTextFieldState extends State<AuthTextField> {
       width: 0.8.sw,
       child: TextFormField(
         key: _formKey,
+        keyboardType: widget.type,
         controller: widget.controller,
         decoration: InputDecoration(
           focusColor: Colors.red,
           hintText: widget.hintText,
           hintStyle:
               TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-          labelText: widget.label,
+          labelText: widget.label + (widget.optional ? ' (Optional)' : ''),
           labelStyle:
               TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
           filled: true,
