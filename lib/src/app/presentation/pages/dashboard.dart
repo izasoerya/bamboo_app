@@ -29,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<MarkerStateBloc, MarkerState>(
       builder: (context, state) {
-        _markers = MarkerController().fetchListMarker(state.markers);
+        _markers = MarkerController().fetchListMarker(state.markers, context);
 
         return Stack(
           children: [

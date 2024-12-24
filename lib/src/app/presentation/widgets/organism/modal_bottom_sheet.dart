@@ -13,8 +13,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ModalBottomSheet extends StatefulWidget {
   final BuildContext parentContext;
+  final String? uidMarker;
 
-  const ModalBottomSheet({super.key, required this.parentContext});
+  const ModalBottomSheet(
+      {super.key, required this.parentContext, this.uidMarker});
 
   @override
   State<ModalBottomSheet> createState() => _ModalBottomSheetState();
@@ -23,6 +25,12 @@ class ModalBottomSheet extends StatefulWidget {
 class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    print(widget.uidMarker);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,24 +72,46 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           SubmitButton(
               onTap: () async {
                 final position = await Geolocator.getCurrentPosition();
-                BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
-                  AddMarkerData(
-                    marker: EntitiesMarker(
-                      uid: '',
-                      uidCreator: defaultUser.uid,
-                      uidUser: [defaultUser.uid],
-                      name: _nameController.text,
-                      description: _descriptionController.text,
-                      strain: '',
-                      qty: 0,
-                      urlImage: '',
-                      ownerName: defaultUser.name,
-                      ownerContact: defaultUser.email,
-                      location: LatLng(position.latitude, position.longitude),
-                      createdAt: DateTime.now(),
+
+                if (widget.uidMarker == null) {
+                  BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                    AddMarkerData(
+                      marker: EntitiesMarker(
+                        uid: '',
+                        uidCreator: defaultUser.uid,
+                        uidUser: [defaultUser.uid],
+                        name: _nameController.text,
+                        description: _descriptionController.text,
+                        strain: '',
+                        qty: 0,
+                        urlImage: '',
+                        ownerName: defaultUser.name,
+                        ownerContact: defaultUser.email,
+                        location: LatLng(position.latitude, position.longitude),
+                        createdAt: DateTime.now(),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                    UpdateMarkerData(
+                      marker: EntitiesMarker(
+                        uid: widget.uidMarker!,
+                        uidCreator: defaultUser.uid,
+                        uidUser: [defaultUser.uid],
+                        name: _nameController.text,
+                        description: _descriptionController.text,
+                        strain: '',
+                        qty: 0,
+                        urlImage: '',
+                        ownerName: defaultUser.name,
+                        ownerContact: defaultUser.email,
+                        location: LatLng(position.latitude, position.longitude),
+                        createdAt: DateTime.now(),
+                      ),
+                    ),
+                  );
+                }
                 Navigator.pop(context);
               },
               text: 'Tambahkan'),

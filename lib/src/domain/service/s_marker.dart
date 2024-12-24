@@ -10,4 +10,8 @@ class ServiceMarker {
   Future<void> addMarker(EntitiesMarker marker) async {
     await InfrastructureMarker().createMarker(marker);
   }
+
+  Future<void> updateMarker(EntitiesMarker marker) async {
+    await InfrastructureMarker().updateMarker(marker);
+  }
 }
