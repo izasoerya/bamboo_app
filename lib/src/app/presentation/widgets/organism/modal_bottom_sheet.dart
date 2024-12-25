@@ -33,7 +33,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
 
   @override
   void initState() {
-    print(widget.uidMarker);
     super.initState();
   }
 

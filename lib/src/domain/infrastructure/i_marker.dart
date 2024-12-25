@@ -46,9 +46,20 @@ class InfrastructureMarker implements RepositoryPolygon {
   }
 
   @override
-  Future<EntitiesMarker?> updateMarker(EntitiesMarker marker) {
-    // TODO: implement updatePolygon
-    throw UnimplementedError();
+  Future<EntitiesMarker?> updateMarker(EntitiesMarker marker) async {
+    print(marker.uid);
+    try {
+      final res = await db
+          .from('marker')
+          .update(marker.copyWith(uid: _uuid.v4()).toJSON())
+          .eq('uid', marker.uid)
+          .select()
+          .single();
+      return EntitiesMarker.fromJSON(res);
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
   }
 
   @override
