@@ -19,12 +19,12 @@ class MarkerController {
                 MaterialLocalizations.of(context).modalBarrierDismissLabel,
             barrierColor: Colors.black54,
             transitionDuration: const Duration(milliseconds: 200),
-            pageBuilder: (BuildContext buildContext, Animation animation,
-                Animation secondaryAnimation) {
+            pageBuilder:
+                (BuildContext buildContext, Animation a1, Animation a2) {
               return Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 child: Material(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                   child: CustomInfoWindow(
                     uidMarker: data.uid,
                     name: data.name,
