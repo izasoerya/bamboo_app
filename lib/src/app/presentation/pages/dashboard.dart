@@ -3,6 +3,7 @@ import 'package:bamboo_app/src/app/use_cases/marker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -13,13 +14,20 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  GoogleMapController? _controller; // Make controller nullable
+  GoogleMapController? _controller;
   Set<Marker> _markers = {};
+  LatLng? _sLocation;
 
   @override
   void initState() {
     super.initState();
+    _getUserLocation();
     BlocProvider.of<MarkerStateBloc>(context).add(FetchMarkerData());
+  }
+
+  Future<void> _getUserLocation() async {
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() => _sLocation = LatLng(position.latitude, position.longitude));
   }
 
   @override
@@ -28,30 +36,31 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (context, state) {
         _markers = MarkerController().fetchListMarker(state.markers, context);
 
-        return Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-                zoom: 14,
-              ),
-              zoomControlsEnabled: false,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-              markers: _markers,
-              onMapCreated: (GoogleMapController controller) {
-                setState(() => _controller = controller);
-              },
-            ),
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: _controller == null
-                  ? Container()
-                  : FloatingMapButton(controller: _controller!),
-            ),
-          ],
-        );
+        return (_sLocation == null
+            ? const Center(child: CircularProgressIndicator())
+            : Stack(
+                children: [
+                  GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: _sLocation!, // Use the user's current location
+                      zoom: 14,
+                    ),
+                    zoomControlsEnabled: false,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
+                    markers: _markers,
+                    onMapCreated: (GoogleMapController controller) {
+                      setState(() => _controller = controller);
+                    },
+                  ),
+                  if (_controller != null)
+                    Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: FloatingMapButton(controller: _controller!),
+                    ),
+                ],
+              ));
       },
     );
   }

@@ -28,6 +28,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final _qtyController = TextEditingController();
   final _ownerNameController = TextEditingController();
   final _ownerContactController = TextEditingController();
+  final _latitudeController = TextEditingController();
+  final _longitudeController = TextEditingController();
 
   @override
   void initState() {
@@ -91,6 +93,22 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
               optional: true,
               type: TextInputType.phone,
             ),
+            SizedBox(height: 0.015.sh),
+            AuthTextField(
+              controller: _latitudeController,
+              hintText: 'Latitude',
+              label: 'Latitude',
+              optional: true,
+              type: TextInputType.phone,
+            ),
+            SizedBox(height: 0.015.sh),
+            AuthTextField(
+              controller: _longitudeController,
+              hintText: 'Longitude',
+              label: 'Longitude',
+              optional: true,
+              type: TextInputType.phone,
+            ),
             SizedBox(height: 0.03.sh),
             Text(
               'Simpan lokasi ini?',
@@ -99,6 +117,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
             SubmitButton(
                 onTap: () async {
                   final position = await Geolocator.getCurrentPosition();
+                  LatLng currentPosition = LatLng(
+                    position.latitude,
+                    position.longitude,
+                  );
 
                   if (widget.uidMarker == null) {
                     BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
@@ -112,10 +134,15 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                           strain: '',
                           qty: 0,
                           urlImage: '',
-                          ownerName: defaultUser.name,
-                          ownerContact: defaultUser.email,
-                          location:
-                              LatLng(position.latitude, position.longitude),
+                          ownerName: _ownerNameController.text,
+                          ownerContact: _ownerContactController.text,
+                          location: _latitudeController.text.isEmpty ||
+                                  _longitudeController.text.isEmpty
+                              ? currentPosition
+                              : LatLng(
+                                  double.parse(_latitudeController.text),
+                                  double.parse(_longitudeController.text),
+                                ),
                           createdAt: DateTime.now(),
                         ),
                       ),
@@ -134,8 +161,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                           urlImage: '',
                           ownerName: defaultUser.name,
                           ownerContact: defaultUser.email,
-                          location:
-                              LatLng(position.latitude, position.longitude),
+                          location: _latitudeController.text.isEmpty ||
+                                  _longitudeController.text.isEmpty
+                              ? currentPosition
+                              : LatLng(
+                                  double.parse(_latitudeController.text),
+                                  double.parse(_longitudeController.text),
+                                ),
                           createdAt: DateTime.now(),
                         ),
                       ),
@@ -144,6 +176,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   Navigator.pop(context);
                 },
                 text: 'Tambahkan'),
+            Padding(
+                padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            )),
           ],
         ),
       ),
