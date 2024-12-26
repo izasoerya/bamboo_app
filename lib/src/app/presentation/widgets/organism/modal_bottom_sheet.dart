@@ -1,6 +1,7 @@
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/image_uploader.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/submit_button.dart';
 import 'package:bamboo_app/src/domain/entities/e_marker.dart';
 import 'package:bamboo_app/utils/default_user.dart';
@@ -108,6 +109,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
               optional: true,
               type: TextInputType.phone,
             ),
+            SizedBox(height: 0.015.sh),
+            const ImageUploader(),
             SizedBox(height: 0.03.sh),
             Text(
               'Simpan lokasi ini?',

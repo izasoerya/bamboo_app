@@ -77,7 +77,9 @@ class CustomInfoWindow extends StatelessWidget {
                         isScrollControlled: true,
                         builder: (BuildContext modalContext) =>
                             ModalBottomSheet(
-                                parentContext: context, uidMarker: uidMarker),
+                          parentContext: context,
+                          uidMarker: uidMarker,
+                        ),
                       );
                     },
                     child: const Text('Update'),
