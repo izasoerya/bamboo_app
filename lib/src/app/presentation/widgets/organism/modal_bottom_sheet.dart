@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
@@ -24,6 +26,7 @@ class ModalBottomSheet extends StatefulWidget {
 }
 
 class _ModalBottomSheetState extends State<ModalBottomSheet> {
+  File? _image;
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _qtyController = TextEditingController();
@@ -32,10 +35,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  void _onImageChanged(File? image) => _image = image;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
               type: TextInputType.phone,
             ),
             SizedBox(height: 0.015.sh),
-            const ImageUploader(),
+            ImageUploader(onImageSelected: _onImageChanged),
             SizedBox(height: 0.03.sh),
             Text(
               'Simpan lokasi ini?',
@@ -135,7 +135,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                           description: _descriptionController.text,
                           strain: '',
                           qty: 0,
-                          urlImage: '',
+                          urlImage: _image == null ? '' : _image!.path,
                           ownerName: _ownerNameController.text,
                           ownerContact: _ownerContactController.text,
                           location: _latitudeController.text.isEmpty ||
@@ -160,7 +160,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                           description: _descriptionController.text,
                           strain: '',
                           qty: 0,
-                          urlImage: '',
+                          urlImage: _image == null ? '' : _image!.path,
                           ownerName: defaultUser.name,
                           ownerContact: defaultUser.email,
                           location: _latitudeController.text.isEmpty ||
@@ -175,6 +175,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                       ),
                     );
                   }
+
                   Navigator.pop(context);
                 },
                 text: 'Tambahkan'),

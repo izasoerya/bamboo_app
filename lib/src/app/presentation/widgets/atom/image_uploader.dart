@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImageUploader extends StatefulWidget {
-  const ImageUploader({super.key});
+  final void Function(File)? onImageSelected;
+  const ImageUploader({super.key, this.onImageSelected});
 
   @override
   State<ImageUploader> createState() => _ImageUploaderState();
@@ -21,7 +22,10 @@ class _ImageUploaderState extends State<ImageUploader> {
         File? image = await FileController().selectFile();
         if (image != null) {
           print('Image selected: ${image.path}');
-          setState(() => _image = image);
+          setState(() {
+            _image = image;
+            widget.onImageSelected!(image);
+          });
         } else {
           print('No image selected');
         }

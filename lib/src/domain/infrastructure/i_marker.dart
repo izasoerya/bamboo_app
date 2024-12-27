@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bamboo_app/src/domain/entities/e_marker.dart';
 import 'package:bamboo_app/src/domain/repositories/r_marker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,10 +11,26 @@ class InfrastructureMarker implements RepositoryPolygon {
 
   @override
   Future<EntitiesMarker?> createMarker(EntitiesMarker marker) async {
+    String publicURL = '';
     try {
+      final String shortImageURL = marker.urlImage.split('file_picker/').last;
+      if (marker.urlImage.isNotEmpty) {
+        final imageRes = await createImageMarker(marker.urlImage);
+        if (!imageRes) {
+          print('Error: Image not uploaded');
+        }
+        publicURL = await db.storage
+            .from('bamboo_images')
+            .createSignedUrl(shortImageURL, 60);
+      }
       final res = await db
           .from('marker')
-          .insert(marker.copyWith(uid: _uuid.v4()).toJSON())
+          .insert(marker
+              .copyWith(
+                uid: _uuid.v4(),
+                urlImage: publicURL,
+              )
+              .toJSON())
           .select()
           .single();
       return EntitiesMarker.fromJSON(res);
@@ -65,6 +83,26 @@ class InfrastructureMarker implements RepositoryPolygon {
   @override
   Future<void> deleteMarker(String uid) {
     // TODO: implement deletePolygon
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> createImageMarker(String url) async {
+    final File imageFile = File(url);
+    final String shortFileURL = url.split('file_picker/').last;
+
+    try {
+      await db.storage.from('bamboo_images').upload(shortFileURL, imageFile);
+      return true;
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
+
+  @override
+  Future<void> deleteImageMarker() {
+    // TODO: implement deleteImageMarker
     throw UnimplementedError();
   }
 }
