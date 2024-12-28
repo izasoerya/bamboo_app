@@ -1,6 +1,7 @@
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/image_snippet.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/info_window_data.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/submit_button.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/organism/modal_bottom_sheet.dart';
 import 'package:bamboo_app/src/domain/entities/e_marker.dart';
 import 'package:flutter/material.dart';
@@ -69,8 +70,8 @@ class CustomInfoWindow extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => showModalBottomSheet(
+                  SubmitButton(
+                    onTap: () => showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext modalContext) => ModalBottomSheet(
@@ -78,11 +79,11 @@ class CustomInfoWindow extends StatelessWidget {
                         uidMarker: marker.uid,
                       ),
                     ),
-                    child: const Text('Update'),
+                    text: 'Update',
                   ),
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Close'),
+                  SubmitButton(
+                    onTap: () => Navigator.pop(context),
+                    text: 'Close',
                   ),
                 ],
               ),
