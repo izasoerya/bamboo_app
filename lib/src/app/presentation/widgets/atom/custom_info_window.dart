@@ -1,5 +1,5 @@
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
-import 'package:bamboo_app/src/app/presentation/widgets/atom/image_hero.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/image_snippet.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/info_window_data.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/organism/modal_bottom_sheet.dart';
 import 'package:bamboo_app/src/domain/entities/e_marker.dart';
@@ -64,7 +64,7 @@ class CustomInfoWindow extends StatelessWidget {
                       header: 'Owner Contact',
                       data: '${marker.ownerName} (${marker.ownerContact})')
                   : const SizedBox(),
-              ImageHero(urlImage: marker.urlImage),
+              ImageSnippet(urlImage: marker.urlImage),
               SizedBox(height: 0.025.sh),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
