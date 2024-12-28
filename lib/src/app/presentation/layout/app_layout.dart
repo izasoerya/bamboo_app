@@ -16,10 +16,6 @@ class AppLayout extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          title: const Text('App Layout'),
-        ),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -43,7 +39,26 @@ class AppLayout extends StatelessWidget {
             ],
           ),
         ),
-        body: child,
+        body: Stack(
+          children: [
+            child,
+            Positioned(
+              top: 40,
+              left: 20,
+              child: Builder(
+                builder: (context) {
+                  return FloatingActionButton(
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    child: Icon(
+                      Icons.menu,
+                      color: Theme.of(context).textTheme.bodyMedium!.color,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
