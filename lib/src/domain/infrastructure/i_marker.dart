@@ -64,11 +64,29 @@ class InfrastructureMarker implements RepositoryPolygon {
 
   @override
   Future<EntitiesMarker?> updateMarker(EntitiesMarker marker) async {
-    print(marker.uid);
+    String publicURL = '';
     try {
+      if (!marker.urlImage.contains('NULL:')) {
+        final String shortImageURL = marker.urlImage.split('file_picker/').last;
+        if (marker.urlImage.isNotEmpty) {
+          final imageRes = await updateImageMarker(marker.urlImage);
+          if (!imageRes) {
+            print('Error: Image not updated');
+          }
+          publicURL =
+              db.storage.from('bamboo_images').getPublicUrl(shortImageURL);
+        }
+      }
       final res = await db
           .from('marker')
-          .update(marker.copyWith(uid: _uuid.v4()).toJSON())
+          .update(marker
+              .copyWith(
+                uid: _uuid.v4(),
+                urlImage: marker.urlImage.contains('NULL:')
+                    ? marker.urlImage.split('NULL:').last
+                    : publicURL,
+              )
+              .toJSON())
           .eq('uid', marker.uid)
           .select()
           .single();
@@ -103,5 +121,23 @@ class InfrastructureMarker implements RepositoryPolygon {
   Future<void> deleteImageMarker() {
     // TODO: implement deleteImageMarker
     throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> updateImageMarker(String url) async {
+    final File imageFile = File(url);
+    final String shortFileURL = url.split('file_picker/').last;
+
+    try {
+      await db.storage.from('bamboo_images').update(
+            shortFileURL,
+            imageFile,
+            fileOptions: const FileOptions(upsert: true),
+          );
+      return true;
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
   }
 }

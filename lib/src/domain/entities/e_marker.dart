@@ -63,7 +63,7 @@ class EntitiesMarker {
     return EntitiesMarker(
       uid: json['uid'],
       uidCreator: json['uidCreator'],
-      uidUser: json['uidUser'].toString().split(','),
+      uidUser: List<String>.from(json['uidUser']),
       name: json['name'],
       description: json['description'],
       strain: json['strain'],

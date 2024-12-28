@@ -7,5 +7,6 @@ abstract class RepositoryPolygon {
   Future<EntitiesMarker?> updateMarker(EntitiesMarker marker);
   Future<void> deleteMarker(String uid);
   Future<bool> createImageMarker(String url);
+  Future<bool> updateImageMarker(String url);
   Future<void> deleteImageMarker();
 }

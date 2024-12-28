@@ -20,21 +20,21 @@ class AppLayout extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              const DrawerHeader(
+              DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Theme.of(context).secondaryHeaderColor,
                 ),
                 child: Text(
                   'Menu Tambahan',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyMedium!.color,
                     fontSize: 24,
                   ),
                 ),
               ),
               ListTile(
                 title: Text('Logout'),
-                onTap: () => router.go('/'),
+                onTap: () => router.go('/login'),
               ),
             ],
           ),

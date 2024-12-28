@@ -1,9 +1,9 @@
 import 'package:bamboo_app/src/app/presentation/widgets/organism/floating_map_button.dart';
+import 'package:bamboo_app/src/app/use_cases/gps_controller.dart';
 import 'package:bamboo_app/src/app/use_cases/marker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -26,15 +26,17 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> _getUserLocation() async {
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() => _sLocation = LatLng(position.latitude, position.longitude));
+    LatLng position = await GpsController().getCurrentPosition();
+    setState(() => _sLocation = position);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MarkerStateBloc, MarkerState>(
-      builder: (context, state) {
-        _markers = MarkerController().fetchListMarker(state.markers, context);
+      builder: (builderContext, state) {
+        _markers = MarkerController(
+                markerStateBloc: BlocProvider.of<MarkerStateBloc>(context))
+            .fetchListMarker(state.markers, context);
 
         return (_sLocation == null
             ? const Center(child: CircularProgressIndicator())
@@ -48,6 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     zoomControlsEnabled: false,
                     myLocationEnabled: true,
                     myLocationButtonEnabled: false,
+                    compassEnabled: false,
                     markers: _markers,
                     onMapCreated: (GoogleMapController controller) {
                       setState(() => _controller = controller);
@@ -59,6 +62,14 @@ class _DashboardPageState extends State<DashboardPage> {
                       right: 20,
                       child: FloatingMapButton(controller: _controller!),
                     ),
+                  // Positioned(
+                  //   top: 40,
+                  //   right: 20,
+                  //   child: SubmitButton(
+                  //       onTap: () => BlocProvider.of<MarkerStateBloc>(context)
+                  //           .add(FetchMarkerData()),
+                  //       text: 'Refresh'),
+                  // ),
                 ],
               ));
       },

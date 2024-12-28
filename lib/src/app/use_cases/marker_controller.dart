@@ -1,9 +1,15 @@
+import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/custom_info_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:bamboo_app/src/domain/entities/e_marker.dart';
 
 class MarkerController {
+  final MarkerStateBloc markerStateBloc;
+
+  MarkerController({required this.markerStateBloc});
+
   Set<Marker> fetchListMarker(
       Set<EntitiesMarker> markers, BuildContext context) {
     final Set<Marker> listMarker = {};
@@ -25,7 +31,13 @@ class MarkerController {
                 alignment: Alignment.center,
                 child: Material(
                   borderRadius: BorderRadius.circular(10),
-                  child: CustomInfoWindow(marker: data),
+                  child: BlocProvider.value(
+                    value: markerStateBloc,
+                    child: CustomInfoWindow(
+                      marker: data,
+                      markerStateBloc: markerStateBloc,
+                    ),
+                  ),
                 ),
               );
             },
