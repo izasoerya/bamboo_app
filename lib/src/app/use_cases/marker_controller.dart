@@ -25,14 +25,7 @@ class MarkerController {
                 alignment: Alignment.center,
                 child: Material(
                   borderRadius: BorderRadius.circular(10),
-                  child: CustomInfoWindow(
-                    uidMarker: data.uid,
-                    name: data.name,
-                    description: data.description,
-                    qty: data.qty,
-                    ownerName: data.ownerName,
-                    ownerContact: data.ownerContact,
-                  ),
+                  child: CustomInfoWindow(marker: data),
                 ),
               );
             },

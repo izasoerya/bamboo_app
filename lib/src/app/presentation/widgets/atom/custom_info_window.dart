@@ -1,27 +1,16 @@
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/image_hero.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/info_window_data.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/organism/modal_bottom_sheet.dart';
+import 'package:bamboo_app/src/domain/entities/e_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomInfoWindow extends StatelessWidget {
-  final String uidMarker;
-  final String name;
-  final String description;
-  final int qty;
-  final String ownerName;
-  final String ownerContact;
+  final EntitiesMarker marker;
 
-  const CustomInfoWindow({
-    super.key,
-    required this.uidMarker,
-    required this.name,
-    required this.description,
-    required this.qty,
-    required this.ownerName,
-    required this.ownerContact,
-  });
+  const CustomInfoWindow({super.key, required this.marker});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +37,7 @@ class CustomInfoWindow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Deskripsi Data',
+                marker.name,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -59,29 +48,36 @@ class CustomInfoWindow extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfoWindowData(header: 'Name', data: name),
-                  InfoWindowData(header: 'Quantity', data: qty.toString()),
+                  marker.strain.isNotEmpty
+                      ? InfoWindowData(header: 'Jenis', data: marker.strain)
+                      : const InfoWindowData(header: 'Jenis', data: '-'),
+                  InfoWindowData(
+                      header: 'Quantity', data: marker.qty.toString()),
                 ],
               ),
-              InfoWindowData(header: 'Description', data: description),
-              InfoWindowData(
-                  header: 'Owner Contact', data: '$ownerName ($ownerContact)'),
+              marker.description.isNotEmpty
+                  ? InfoWindowData(
+                      header: 'Description', data: marker.description)
+                  : const SizedBox(),
+              marker.ownerName.isNotEmpty
+                  ? InfoWindowData(
+                      header: 'Owner Contact',
+                      data: '${marker.ownerName} (${marker.ownerContact})')
+                  : const SizedBox(),
+              ImageHero(urlImage: marker.urlImage),
               SizedBox(height: 0.025.sh),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext modalContext) =>
-                            ModalBottomSheet(
-                          parentContext: context,
-                          uidMarker: uidMarker,
-                        ),
-                      );
-                    },
+                    onPressed: () => showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext modalContext) => ModalBottomSheet(
+                        parentContext: context,
+                        uidMarker: marker.uid,
+                      ),
+                    ),
                     child: const Text('Update'),
                   ),
                   ElevatedButton(

@@ -19,9 +19,8 @@ class InfrastructureMarker implements RepositoryPolygon {
         if (!imageRes) {
           print('Error: Image not uploaded');
         }
-        publicURL = await db.storage
-            .from('bamboo_images')
-            .createSignedUrl(shortImageURL, 60);
+        publicURL =
+            db.storage.from('bamboo_images').getPublicUrl(shortImageURL);
       }
       final res = await db
           .from('marker')
