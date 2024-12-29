@@ -65,11 +65,13 @@ class InfrastructureMarker implements RepositoryPolygon {
   @override
   Future<EntitiesMarker?> updateMarker(EntitiesMarker marker) async {
     String publicURL = '';
+    final oldMarker = await readMarker(marker.uid);
     try {
       if (!marker.urlImage.contains('NULL:')) {
         final String shortImageURL = marker.urlImage.split('file_picker/').last;
         if (marker.urlImage.isNotEmpty) {
-          final imageRes = await updateImageMarker(marker.urlImage);
+          final imageRes =
+              await updateImageMarker(marker.urlImage, oldMarker!.urlImage);
           if (!imageRes) {
             print('Error: Image not updated');
           }
@@ -118,18 +120,20 @@ class InfrastructureMarker implements RepositoryPolygon {
   }
 
   @override
-  Future<void> deleteImageMarker() {
-    // TODO: implement deleteImageMarker
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> updateImageMarker(String url) async {
+  Future<bool> updateImageMarker(String url, String oldUrl) async {
     final File imageFile = File(url);
     final String shortFileURL = url.split('file_picker/').last;
 
     try {
-      await db.storage.from('bamboo_images').update(
+      final String relativePath = oldUrl.split('bamboo_images/').last;
+      print('rev path: $relativePath');
+
+      await db.storage.from('bamboo_images').remove([relativePath]);
+    } catch (e) {
+      print('Error: $e');
+    }
+    try {
+      await db.storage.from('bamboo_images').upload(
             shortFileURL,
             imageFile,
             fileOptions: const FileOptions(upsert: true),
@@ -138,6 +142,18 @@ class InfrastructureMarker implements RepositoryPolygon {
     } catch (e) {
       print('Error: $e');
       return false;
+    }
+  }
+
+  @override
+  Future<void> testDeleteImageMarker() async {
+    try {
+      final res = await db.storage.from('bamboo_images').remove([
+        'https://gysbnohwkzlxhlqcfhwn.supabase.co/storage/v1/object/public/bamboo_images/1735372142085/IMG-20241228-WA0044.jpg'
+      ]);
+      print('Response: $res');
+    } catch (e) {
+      print('Error: $e');
     }
   }
 }

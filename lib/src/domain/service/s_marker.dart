@@ -19,4 +19,8 @@ class ServiceMarker {
   Future<void> updateMarker(EntitiesMarker marker) async {
     await InfrastructureMarker().updateMarker(marker);
   }
+
+  Future<void> testDeleteImageMarker() async {
+    await InfrastructureMarker().testDeleteImageMarker();
+  }
 }

@@ -66,8 +66,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   //   top: 40,
                   //   right: 20,
                   //   child: SubmitButton(
-                  //       onTap: () => BlocProvider.of<MarkerStateBloc>(context)
-                  //           .add(FetchMarkerData()),
+                  //       onTap: () async =>
+                  //           await ServiceMarker().testDeleteImageMarker(),
                   //       text: 'Refresh'),
                   // ),
                 ],
