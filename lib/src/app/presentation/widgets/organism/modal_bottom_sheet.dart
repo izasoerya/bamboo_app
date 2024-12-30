@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bamboo_app/src/app/blocs/marker_state.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/auth_text_field.dart';
+import 'package:bamboo_app/src/app/presentation/widgets/atom/delete_button.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/header_auth.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/image_uploader.dart';
 import 'package:bamboo_app/src/app/presentation/widgets/atom/submit_button.dart';
@@ -173,84 +174,93 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   }
 
   Widget _buildSubmitButton(EntitiesMarker? marker) {
-    return SubmitButton(
-      onTap: () async {
-        final position = await GpsController().getCurrentPosition();
-        LatLng currentPosition = LatLng(
-          position.latitude,
-          position.longitude,
-        );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Spacer(flex: 2),
+        SubmitButton(
+          onTap: () async {
+            final position = await GpsController().getCurrentPosition();
+            LatLng currentPosition = LatLng(
+              position.latitude,
+              position.longitude,
+            );
 
-        if (widget.uidMarker == null) {
-          BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
-            AddMarkerData(
-              marker: EntitiesMarker(
-                uid: '',
-                uidCreator: defaultUser.uid,
-                uidUser: [defaultUser.uid],
-                name: _nameController.text,
-                description: _descriptionController.text,
-                strain: '',
-                qty: int.tryParse(_qtyController.text) ?? 0,
-                urlImage: _image == null ? '' : _image!.path,
-                ownerName: _ownerNameController.text,
-                ownerContact: _ownerContactController.text,
-                location: _latitudeController.text.isEmpty ||
-                        _longitudeController.text.isEmpty
-                    ? currentPosition
-                    : LatLng(
-                        double.parse(_latitudeController.text),
-                        double.parse(_longitudeController.text),
-                      ),
-                createdAt: DateTime.now(),
-              ),
-            ),
-          );
-        } else {
-          BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
-            UpdateMarkerData(
-              marker: EntitiesMarker(
-                uid: marker!.uid,
-                uidCreator: marker.uidCreator,
-                uidUser: marker.uidUser,
-                name: _nameController.text.isEmpty
-                    ? marker.name
-                    : _nameController.text,
-                description: _descriptionController.text.isEmpty
-                    ? marker.description
-                    : _descriptionController.text,
-                strain: '',
-                qty: _qtyController.text.isEmpty
-                    ? marker.qty
-                    : int.parse(_qtyController.text),
-                urlImage:
-                    _image == null ? 'NULL:${marker.urlImage}' : _image!.path,
-                ownerName: _ownerNameController.text.isEmpty
-                    ? marker.ownerName
-                    : _ownerNameController.text,
-                ownerContact: _ownerContactController.text.isEmpty
-                    ? marker.ownerContact
-                    : _ownerContactController.text,
-                location: _latitudeController.text.isEmpty ||
-                        _longitudeController.text.isEmpty
-                    ? currentPosition
-                    : LatLng(
-                        double.parse(_latitudeController.text),
-                        double.parse(_longitudeController.text),
-                      ),
-                createdAt: DateTime.now(),
-              ),
-            ),
-          );
-        }
-        if (widget.uidMarker == null) {
-          router.pop();
-        } else {
-          router.pop();
-          router.pop();
-        }
-      },
-      text: 'Tambahkan',
+            if (widget.uidMarker == null) {
+              BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                AddMarkerData(
+                  marker: EntitiesMarker(
+                    uid: '',
+                    uidCreator: defaultUser.uid,
+                    uidUser: [defaultUser.uid],
+                    name: _nameController.text,
+                    description: _descriptionController.text,
+                    strain: '',
+                    qty: int.tryParse(_qtyController.text) ?? 0,
+                    urlImage: _image == null ? '' : _image!.path,
+                    ownerName: _ownerNameController.text,
+                    ownerContact: _ownerContactController.text,
+                    location: _latitudeController.text.isEmpty ||
+                            _longitudeController.text.isEmpty
+                        ? currentPosition
+                        : LatLng(
+                            double.parse(_latitudeController.text),
+                            double.parse(_longitudeController.text),
+                          ),
+                    createdAt: DateTime.now(),
+                  ),
+                ),
+              );
+            } else {
+              BlocProvider.of<MarkerStateBloc>(widget.parentContext).add(
+                UpdateMarkerData(
+                  marker: EntitiesMarker(
+                    uid: marker!.uid,
+                    uidCreator: marker.uidCreator,
+                    uidUser: marker.uidUser,
+                    name: _nameController.text.isEmpty
+                        ? marker.name
+                        : _nameController.text,
+                    description: _descriptionController.text.isEmpty
+                        ? marker.description
+                        : _descriptionController.text,
+                    strain: '',
+                    qty: _qtyController.text.isEmpty
+                        ? marker.qty
+                        : int.parse(_qtyController.text),
+                    urlImage: _image == null
+                        ? 'NULL:${marker.urlImage}'
+                        : _image!.path,
+                    ownerName: _ownerNameController.text.isEmpty
+                        ? marker.ownerName
+                        : _ownerNameController.text,
+                    ownerContact: _ownerContactController.text.isEmpty
+                        ? marker.ownerContact
+                        : _ownerContactController.text,
+                    location: _latitudeController.text.isEmpty ||
+                            _longitudeController.text.isEmpty
+                        ? currentPosition
+                        : LatLng(
+                            double.parse(_latitudeController.text),
+                            double.parse(_longitudeController.text),
+                          ),
+                    createdAt: DateTime.now(),
+                  ),
+                ),
+              );
+            }
+            if (widget.uidMarker == null) {
+              router.pop();
+            } else {
+              router.pop();
+              router.pop();
+            }
+          },
+          text: 'Tambahkan',
+        ),
+        const Spacer(),
+        DeleteButton(onTap: () {}),
+      ],
     );
   }
 }

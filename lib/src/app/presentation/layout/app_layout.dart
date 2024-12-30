@@ -33,7 +33,7 @@ class AppLayout extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text('Logout'),
+                title: const Text('Logout'),
                 onTap: () => router.go('/login'),
               ),
             ],
