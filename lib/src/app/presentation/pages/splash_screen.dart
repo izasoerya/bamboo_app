@@ -11,7 +11,7 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
-  String _error = 'Requesting necessary permissions...';
+  String _error = 'Sedang Meminta Izin...';
 
   @override
   void initState() {

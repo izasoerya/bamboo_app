@@ -4,7 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class InfoWindowData extends StatelessWidget {
   final String header;
   final String data;
-  const InfoWindowData({super.key, required this.header, required this.data});
+  final bool? half;
+  const InfoWindowData({
+    super.key,
+    required this.header,
+    required this.data,
+    this.half = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,7 @@ class InfoWindowData extends StatelessWidget {
                   fontSize: 16,
                 ),
             textAlign: TextAlign.center,
+            overflow: TextOverflow.visible,
           ),
           Padding(padding: EdgeInsets.only(top: 0.02.sh)),
         ],

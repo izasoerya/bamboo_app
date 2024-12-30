@@ -44,12 +44,31 @@ class CustomInfoWindow extends StatelessWidget {
           ),
           SizedBox(height: 0.025.sh),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              marker.strain.isNotEmpty
-                  ? InfoWindowData(header: 'Jenis', data: marker.strain)
-                  : const InfoWindowData(header: 'Jenis', data: '-'),
-              InfoWindowData(header: 'Quantity', data: marker.qty.toString()),
+              Flexible(
+                flex: 3,
+                child: marker.strain.isNotEmpty
+                    ? InfoWindowData(
+                        header: 'Jenis',
+                        data: marker.strain,
+                        half: true,
+                      )
+                    : const InfoWindowData(
+                        header: 'Jenis',
+                        data: '-',
+                        half: true,
+                      ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 0.05.sw)),
+              Flexible(
+                flex: 1,
+                child: InfoWindowData(
+                  header: 'Quantity',
+                  data: marker.qty.toString(),
+                  half: true,
+                ),
+              ),
             ],
           ),
           marker.description.isNotEmpty

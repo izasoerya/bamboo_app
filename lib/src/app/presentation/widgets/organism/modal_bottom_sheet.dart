@@ -32,6 +32,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _qtyController = TextEditingController();
+  final _strainController = TextEditingController();
   final _ownerNameController = TextEditingController();
   final _ownerContactController = TextEditingController();
   final _latitudeController = TextEditingController();
@@ -51,6 +52,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         _nameController.text = marker.name;
         _descriptionController.text = marker.description;
         _qtyController.text = marker.qty.toString();
+        _strainController.text = marker.strain;
         _ownerNameController.text = marker.ownerName;
         _ownerContactController.text = marker.ownerContact;
         _latitudeController.text = marker.location.latitude.toString();
@@ -133,6 +135,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         ),
         SizedBox(height: 0.015.sh),
         AuthTextField(
+          controller: _strainController,
+          hintText: 'Jenis',
+          label: 'Jenis',
+          optional: true,
+        ),
+        SizedBox(height: 0.015.sh),
+        AuthTextField(
           controller: _descriptionController,
           hintText: 'Description',
           label: 'Description',
@@ -195,7 +204,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     uidUser: [defaultUser.uid],
                     name: _nameController.text,
                     description: _descriptionController.text,
-                    strain: '',
+                    strain: _strainController.text,
                     qty: int.tryParse(_qtyController.text) ?? 0,
                     urlImage: _image == null ? '' : _image!.path,
                     ownerName: _ownerNameController.text,
@@ -224,7 +233,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     description: _descriptionController.text.isEmpty
                         ? marker.description
                         : _descriptionController.text,
-                    strain: '',
+                    strain: _strainController.text.isEmpty
+                        ? marker.strain
+                        : _strainController.text,
                     qty: _qtyController.text.isEmpty
                         ? marker.qty
                         : int.parse(_qtyController.text),
