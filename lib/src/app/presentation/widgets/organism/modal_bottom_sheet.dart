@@ -243,8 +243,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
             ),
           );
         }
-        router.pop();
-        router.pop();
+        if (widget.uidMarker == null) {
+          router.pop();
+        } else {
+          router.pop();
+          router.pop();
+        }
       },
       text: 'Tambahkan',
     );
