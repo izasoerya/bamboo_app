@@ -259,7 +259,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           text: 'Tambahkan',
         ),
         const Spacer(),
-        DeleteButton(onTap: () {}),
+        widget.uidMarker != null ? DeleteButton(onTap: () {}) : const Spacer(),
       ],
     );
   }
