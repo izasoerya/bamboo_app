@@ -45,7 +45,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   GoogleMap(
                     initialCameraPosition: CameraPosition(
                       target: _sLocation!, // Use the user's current location
-                      zoom: 14,
+                      zoom: 15,
                     ),
                     zoomControlsEnabled: false,
                     myLocationEnabled: true,

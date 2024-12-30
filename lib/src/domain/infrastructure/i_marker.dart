@@ -126,8 +126,6 @@ class InfrastructureMarker implements RepositoryPolygon {
 
     try {
       final String relativePath = oldUrl.split('bamboo_images/').last;
-      print('rev path: $relativePath');
-
       await db.storage.from('bamboo_images').remove([relativePath]);
     } catch (e) {
       print('Error: $e');
