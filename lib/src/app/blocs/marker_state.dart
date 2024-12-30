@@ -19,6 +19,12 @@ class UpdateMarkerData extends MarkerEvent {
   UpdateMarkerData({required this.marker});
 }
 
+class DeleteMarkerData extends MarkerEvent {
+  final EntitiesMarker marker;
+
+  DeleteMarkerData({required this.marker});
+}
+
 class MarkerState {
   final Set<EntitiesMarker> markers;
 
@@ -41,6 +47,13 @@ class MarkerStateBloc extends Bloc<MarkerEvent, MarkerState> {
 
     on<UpdateMarkerData>((event, emit) async {
       await ServiceMarker().updateMarker(event.marker);
+      final markers = await ServiceMarker().fetchListMarker(defaultUser.uid);
+
+      emit(MarkerState(markers: markers));
+    });
+
+    on<DeleteMarkerData>((event, emit) async {
+      await ServiceMarker().deleteMarker(event.marker);
       final markers = await ServiceMarker().fetchListMarker(defaultUser.uid);
 
       emit(MarkerState(markers: markers));

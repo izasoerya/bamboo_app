@@ -259,7 +259,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           text: 'Tambahkan',
         ),
         const Spacer(),
-        widget.uidMarker != null ? DeleteButton(onTap: () {}) : const Spacer(),
+        widget.uidMarker != null
+            ? DeleteButton(onTap: () {
+                BlocProvider.of<MarkerStateBloc>(widget.parentContext)
+                    .add(DeleteMarkerData(marker: marker!));
+                router.pop();
+                router.pop();
+              })
+            : const Spacer(),
       ],
     );
   }

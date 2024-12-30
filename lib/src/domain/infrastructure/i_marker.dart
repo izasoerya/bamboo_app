@@ -100,9 +100,15 @@ class InfrastructureMarker implements RepositoryPolygon {
   }
 
   @override
-  Future<void> deleteMarker(String uid) {
-    // TODO: implement deletePolygon
-    throw UnimplementedError();
+  Future<void> deleteMarker(EntitiesMarker marker) async {
+    try {
+      if (marker.urlImage.isNotEmpty) {
+        await deteleImageMarker(marker.urlImage);
+      }
+      await db.from('marker').delete().eq('uid', marker.uid);
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -140,6 +146,17 @@ class InfrastructureMarker implements RepositoryPolygon {
     } catch (e) {
       print('Error: $e');
       return false;
+    }
+  }
+
+  @override
+  Future<void> deteleImageMarker(String url) async {
+    final String relativePath = url.split('bamboo_images/').last;
+
+    try {
+      await db.storage.from('bamboo_images').remove([relativePath]);
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
