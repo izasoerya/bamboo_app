@@ -16,6 +16,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.6
   flutter_dotenv: ^5.2.1
+  flutter_launcher_icons: ^0.14.2
   flutter_localizations:
     sdk: flutter
   flutter_screenutil: ^5.9.3
@@ -30,16 +31,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
 
-  # Enable generation of localized Strings from arb files.
-  generate: true
-
   assets:
     # Add assets from the images directory to the application.
     - assets/.env
-    - assets/images/
+    - assets/images/Logo_Sapuran_Berperan.png
     - assets/dark_mode_map.json
+    - assets/images/SiMandja-Logo.png
