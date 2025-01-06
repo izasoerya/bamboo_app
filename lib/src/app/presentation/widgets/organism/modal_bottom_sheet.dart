@@ -29,6 +29,7 @@ class ModalBottomSheet extends StatefulWidget {
 }
 
 class _ModalBottomSheetState extends State<ModalBottomSheet> {
+  Future<EntitiesMarker>? _markerFuture;
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _qtyController = TextEditingController();
@@ -40,8 +41,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
 
   File? _image;
   void _onImageChanged(File? image) => _image = image;
-
-  Future<EntitiesMarker>? _markerFuture;
 
   @override
   void initState() {
@@ -97,8 +96,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
             ),
             SizedBox(height: 0.03.sh),
             _buildTextFields(),
-            SizedBox(height: 0.015.sh),
-            ImageUploader(onImageSelected: _onImageChanged),
             SizedBox(height: 0.03.sh),
             Text(
               'Simpan lokasi ini?',
@@ -121,30 +118,41 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       children: [
         AuthTextField(
           controller: _nameController,
-          hintText: 'Name',
-          label: 'Name',
+          hintText: 'Nama',
+          label: 'Nama',
           validator: TextfieldValidator.name,
         ),
         SizedBox(height: 0.015.sh),
-        AuthTextField(
-          controller: _qtyController,
-          hintText: 'Quantity',
-          label: 'Quantity',
-          validator: TextfieldValidator.name,
-          type: TextInputType.number,
-        ),
-        SizedBox(height: 0.015.sh),
-        AuthTextField(
-          controller: _strainController,
-          hintText: 'Jenis',
-          label: 'Jenis',
-          optional: true,
+        Row(
+          children: [
+            Flexible(
+              flex: 2,
+              fit: FlexFit.tight,
+              child: AuthTextField(
+                controller: _strainController,
+                hintText: 'Jenis Bambu',
+                label: 'Jenis Bambu',
+                optional: true,
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(left: 0.02.sw)),
+            Flexible(
+              flex: 1,
+              child: AuthTextField(
+                controller: _qtyController,
+                hintText: 'Jumlah',
+                label: 'Jumlah',
+                validator: TextfieldValidator.name,
+                type: TextInputType.number,
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 0.015.sh),
         AuthTextField(
           controller: _descriptionController,
-          hintText: 'Description',
-          label: 'Description',
+          hintText: 'Deskripsi',
+          label: 'Deskripsi',
           optional: true,
         ),
         SizedBox(height: 0.015.sh),
@@ -163,21 +171,34 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           type: TextInputType.phone,
         ),
         SizedBox(height: 0.015.sh),
-        AuthTextField(
-          controller: _latitudeController,
-          hintText: 'Latitude',
-          label: 'Latitude',
-          optional: true,
-          type: TextInputType.phone,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 1,
+              child: AuthTextField(
+                controller: _latitudeController,
+                hintText: 'Latitude',
+                label: 'Latitude',
+                optional: true,
+                type: TextInputType.phone,
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(left: 0.02.sw)),
+            Flexible(
+              flex: 1,
+              child: AuthTextField(
+                controller: _longitudeController,
+                hintText: 'Longitude',
+                label: 'Longitude',
+                optional: true,
+                type: TextInputType.phone,
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 0.015.sh),
-        AuthTextField(
-          controller: _longitudeController,
-          hintText: 'Longitude',
-          label: 'Longitude',
-          optional: true,
-          type: TextInputType.phone,
-        ),
+        ImageUploader(onImageSelected: _onImageChanged),
       ],
     );
   }
